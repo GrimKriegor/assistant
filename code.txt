@@ -1,0 +1,2283 @@
+@name grim's assistant k11-1121
+@outputs Turret Grab Igniter Explosive Light
+@persist Owner:entity Follow Light Vector:vector Su [Version WebVersion MOTD]:string Update NewCode:string VersionInfo:array
+@persist Ent:entity EntTarget:entity InfExplosive DevLock
+@persist Height Height2 Target Who:entity WorldPos:vector
+@persist OrbitType OrbitRadius OrbitVelocity SSource:entity PropInfo PropOwner:string
+@persist Color:vector Color4:vector4 HSize:vector Size:number Skin:string Trail:string TrailColor:vector TrailSize:number Opacity:number NotSolid:number HSkin:string
+@persist PropCore #addon check
+@persist Snake SnakeList:array SnakeTarget:entity Counter Max
+@persist Necromancer Base:vector Delay NecroTarget:entity E:entity 
+@persist Psychokinesis Holding Use HoldDistance ThrowStrength Haax
+@persist Revenge Players:array PlayerKills:array Deaths WhoDeaths PlayerCount
+@persist Aggregate AggPlayer:entity AggTarget PropList:array PropPositionList:array SearchFlag PropCount Index ExplosionPosition:vector ExplosionSequenceInitiated NumPropsAtDestination AllPropsAtDestination PropsVibrating Exploding
+@persist Blind BlindTarget:entity EarRape MusicList:array
+@persist Locate Locating LocateList:array LocateListNames:array
+@persist NPCArmy Army:array ArmyTarget:entity ArmyPos:vector ArmyFollow
+@model models/hunter/misc/sphere025x025.mdl
+
+
+###############-- Assistant by Grim Kriegor --###############
+#                   grimkriegor@gmail.com
+
+Version = "k11-1121"
+
+#Your assistant will inform you everytime a new version is avaliable!
+
+#There's a changelog at the end of the code...
+#[   
+
+   V E R Y   USEFULL COMMAND LIST BELOW [SCROLL DOWN]
+                                and also some useless trivia:
+ ----------------------------------------------------------------------------------------------
+       Oh hai thar! So long story short, I wrote the  first lines of this little toy
+ back in July as I started learning about this magic script sauce called Expression2.
+       At first as any moron I was worried about minges having it, so I wouldnt share
+ it with anyone, not even allowing them to properly dupe it.
+       It was a few months later, after a shitload of time being unable to play Garry's Mod
+ due to the massive amount of work college provided me with, when I realized that I was being dumb 
+ and that this is all about fun and gummi bears, and so I decided to finally share this shitty toy with the world for fun's sake.
+ 
+       Well people seemed to have lots of fun with it, so I kept sharing the code as development
+ progressed. Noob coding I know, but hey I hope you have some fun with it :D
+
+ ALSO THAT: The small percentage of the code I didnt write is credited in the Command List Below.
+
+ AND THAT: Yes, 25% of the maxquota when every skill is off is a lot, but I cant seem to find a 
+              way to reduce it besides deleting like half of the code, if you find a better way to do this
+		please report it to me, thx :D
+ ------------------------------------------------------------------------------------------------
+
+ MANY THANKS TO:
+  - Luck Wielding Lunatic (for being the best gaming pal of all tiemz :D)
+  - NeO_Huperman (for hosting his amazing GMod Server)
+  - Silicon (for his leet skills and will to help, also for hosting his MaximumTrolling-Sponge-compatible Server :D
+  - Ghostrin, bestchallenger|PT|, Clicklord, Kamakazebanzai,
+     OMEGA, BeafyBubbles, Donut, mr. bubbles, Beaver and Zatrac (for the inspiration and support)
+  - All the E2 authors and Minges that contributed and inspired the concepts and features in this code
+ 
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+ --- Updater ---
+ /update - updates or redownloads The Assistant from the Web
+
+
+
+
+ --- Position ---
+ /height NUMBER - changes Height to NUMBER (Default=120)
+ /up | /down - +-10 Height
+ /radius NUMBER - changes the orbit radius to NUMBER (Default=70)
+ /ovelocity NUMBER - changes orbit velocity to NUMBER (Default=90)
+
+ /master - follow OWNER
+ /omaster or /nomaster - orbit OWNER
+ /cross - follow CROSSHAIRS
+ /ocross - orbit CROSSHAIRS
+ /follow PLAYER - follow PLAYER
+ /orbit PLAYER or /norbit PLAYER - orbit PLAYER
+ /that - follow TARGET ENTITY [CROSSHAIRS ON TARGET]
+ /othat - orbit TARGET ENTITY [CROSSHAIRS ON TARGET]
+ /place - hover TARGET COORDINATES [CROSSHAIRS ON MAP]
+ /oplace or /noplace  - hover and orbit CROSSHAIRS COORDINATES [CROSSHAIRS ON MAP]
+ /gosleep - makes the drone deactivates itself in a location [CROSSHAIRS ON MAP]
+
+
+
+ --- Skills ---
+ /sd! - Self Destruction!!!
+ bba - activates EXPLOSIVE OUTPUT
+ /ppinfo - activates PropInfo (MouseKey2 on target to see the owner)
+ /ppinfooff deactivates PropInfo
+ !brl or !brls - spawns 1 or 10 barrels, respectively (needs 'wire_expression2_concmd 1')
+ /fury PLAYER - follow PLAYER with FURY MODE (hurts PLAYER)
+ /efury PLAYER - follow PLAYER with FURY MODE and repetitive explosions
+ /torture PLAYER - uses both the Blind major skill, the /earrape and the /efury skills to torment PLAYER
+ /tortureoff - deactivates Torture
+ /earrape - activates the Ear Rape skill
+ /earrapeoff - deactivates the Ear Rape skill
+ /e2list - lists all the Expression2 chips in the server
+
+
+
+ --- Skills + Return ---
+ (NOTE: 'say mbba' and 'say mbbas' should be binded to Keyboard Keys for easy access)
+
+ pbba PLAYER - assassinates PLAYER with Explosives and returns (needs explosives wired to EXPLOSIVE OUTPUT)
+ mbba - explodes in the CROSSHAIR LOCATION and returns
+ mbbas - explodes in the CROSSHAIR LOCATION, spawning 10 flaming barrels and returns (needs a huge HP explosive, or else might kill the owner when returning) (needs 'wire_expression2_concmd 1')
+ find PLAYER - finds PLAYER and returns
+ findi PLAYER - finds PLAYER and returns invisible
+
+
+
+ --- Cammo ---
+ /invisible - makes the Assistant invisible
+ /visible - makes the Assistant visible
+ /sneak - makes OWNER invisible
+ /unsneak - makes OWNER visible
+ /hide = /invisible + /sneak
+ /unhide = /visible + /unsneak
+
+
+
+ --- Body ---
+ /ghost - Activates GHOST Mode making the Assistant Non-Solid [!!! REQUIRES the PropCore plugin !!!]
+ /unghost - Deactivates GHOST Mode
+ /body reset - resets the body options (color, size...)
+ /size NUMBER - changes the size to NUMBER
+ /trailsize NUMBER - changes the trail size to NUMBER
+ /body COLOR - changes the color preset
+               COLOURs are: black, yellow, green, green2, blue, red, white and white2
+
+
+
+ --- Sounds ---
+ /soundstop - stops the music player and the ambient sounds
+ /ss_(owner, ent, weld, target) - changes the source of the sound (Default='/ss_owner')
+ /music | /music NUMBER - activates or changes the music track (/music will pick a random track)
+ /ambient | /ambient NUMBER - activates or changes the ambient track (/ambient will pick a random track)
+
+
+
+ --- Movement and General ---
+ /on - turns ON the movement
+ /off - turns OFF the movement
+ /reset - turns ON the movement and restarts the position to default
+
+ /skillsoff - turns OFF all the MAJOR SKILLS
+ /reboot - reboots the chip, as if it just spawned
+ /su PLAYER - changes user to PLAYER (/su reverts back to the original owner)
+
+
+
+
+ ---- Major Skills ----
+ ----------------------
+
+ ::: Snake :::
+ (With this skill all the OWNER's props with the model Helicopter Bomb will spin above the player's head and attack the CROSSHAIRS when the CTRL key is pressed)
+ (If a player was targeted by this skill, the props will stop attacking the CROSSHAIRS position to attack the targeted player)
+ (Many thanks to 'EXO's Propsnake' for providing part of the code)
+
+ /snkon - activates Snake
+ /snkoff - deactivates Snake
+ /snkreset - resets Snake
+ /snk PLAYER - assigns PLAYER as Snake's target (will sometimes fail, try /snkoff first)
+ /snks - activates Snake and spawns 10 HeliBombs (needs 'wire_expression2_concmd 1')
+
+
+
+ ::: Necromancer :::
+ (This skill allows the player to animate a Ragdoll to attack someone)
+ (I gotta thank 'Bone Example: Zombie (by Shoffing)' from the GMod's Wiki for providing the base code)
+
+ /necro PLAYER - assigns PLAYER as NECROMANCER's target and activates it [CROSSAIRS ON THE RAGDOLL]
+ /necroon - activates NECROMANCER
+ /necrooff - deactivates NECROMANCER
+ /necroset PLAYER - sets PLAYER as NECROMANCER'S target on that ragdoll with the ragdoll still inactive [CROSSAIRS ON THE RAGDOLL]
+ /necrochange PLAYER - sets PLAYER as the new NECROMANCER's target
+
+
+
+ ::: Psychokinesis :::
+ (A skill that allows the player to pick up a Prop and throw it around, use it as a boomerang and increase its mass for maximum throwing power)
+ (Thanks to 'Roflc0pter's Snake E2' for the concept)
+ (E key to select prop/grab prop/release prop || Mouse1 to throw || Mouse2 to recall selected prop/increase its mass)
+ ('say !brl' should be binded to a Keyboard Key for easy explosive barrel spawn)
+
+ /kinesis - activates PSYCHOKINESIS
+ /kinesisoff - deactivates PSYCHOKINESIS
+ /kinesisreset - resets PSYCHOKINESIS
+ mmss - increases the selected prop's mass to MAX
+ !haax - DR.HAAX sounds
+ !haaxoff - deactivates DR.HAAX sounds
+
+
+
+ ::: Revenge :::
+ (This skill will kill someone who kills you, with the Bomb Assassination SKill)
+ (Props to 'Fairy by MURDATS' for the concept)
+
+ /revenge - activates REVENGE MODE and avenges OWNER's last death last death
+ /revengeon - activates REVENGE MODE without avenging the OWNER's last death
+ /revengeoff - deactivates REVENGE MODE
+
+
+
+ ::: Aggregate :::
+ (This one allows you to make explosive barrels Aggregate in a spot)
+ (All credit goes to EXO for his 'PropSplosion E2'. I just merged it with this drone because it was such a cool E2)
+ (E key to make the barrels Aggregate in the CROSSHAIRS spot)
+ (BROTIP: Spawn barrels in a distant location with the '!brls', activate the skill '/agg',
+  press E on the Target Location, wait until the barrels start flying up, and then E again to make them rain)
+
+ /agg - activates AGGREGATE
+ /aggoff - deactivates AGGREGATE
+ /aggp PLAYER - set AGGREGATE's Target to PLAYER
+
+
+
+ ::: Blind:::
+ (Covers the target's field of vision)
+
+ /blind PLAYER - blinds PLAYER
+ /unblind - deactivates the Blind Major Skill
+
+
+
+ ::: Locate :::
+ (Creates a holo HUD pointing the location of the selected players or E2 Chips)
+ (Thx to Failcake's E2 Finder, for providing the brilliant concept & the color change by distance method, its pretty neat)
+ (Red/Orange is for normal players and E2 Chips, Green for Steam Friends and Blue for admins)
+
+ /locate PLAYER - activates and adds PLAYER to the Locate List
+ /locate e2 /or/ friends - activates, lists and locates E2 Chips or Steam Friends
+ /loca PLAYER - activates and locates PLAYER (and only PLAYER)
+ /locateoff - resets the list and deactivates the LOCATE Major Skill
+
+
+
+ ::: NPC Army :::
+ (Allows the user to mobilize a group of NPCs to his will)
+ (Press E to make the army go to a spot on the map near them)
+ (They will attack anyone you attack)
+
+ /army - activates the Army
+ /armyoff - deactivates the Army
+ /armyfollow - toggles the Follow mode
+ /army WEAPON - gives WEAPON to the army (ex: /army pistol)
+ /armyattack PLAYER - makes the Army target PLAYER
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+]#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Boot Sequence --------------------------------------------------------
+    if (first()|duped()) {
+    runOnTick(1)
+    runOnChat(1)
+    runOnHTTP(1)
+    
+    DevLock=0
+                                                                                                                                                                           setName("grim's assistant "+Version)                                                                                                                                                                  
+    hint("       Assistant by Grim Kriegor       ",10)
+    print(_HUD_PRINTCENTER,"grim's assistant")
+    print("Version: "+Version)
+    print("by Grim Kriegor")
+                                                                                                                                                       if (owner():name()=="Grim Kriegor" & owner():steamID() != "STEAM_0:0:10211667") {selfDestructAll() , hint("Wrong Username",5)}
+    Owner=owner()
+    
+    
+    #Version Check (SEND REQUEST)
+    if(httpCanRequest()) {
+    httpRequest("http://dl.dropbox.com/u/13384614/assistant/version.txt")}
+    
+    entity():soundPlay(1,0,"buttons/blip2.wav")    
+                                                                                                                                                        
+    #Major Skills
+    Necromancer=0
+    Snake=0
+    Psychokinesis=0
+    PropInfo=0
+    Revenge=0
+    Aggregate=0
+    Blind=0
+    Locate=0
+    NPCArmy=0
+    
+    
+    #Default Position
+    EarRape=0
+    InfExplosive=0 
+    OrbitType=11
+    Target=11
+    OrbitRadius=75
+    Height=120
+    Height2=120
+    OrbitVelocity=90
+    timer("reset",7000)
+    
+    
+    #Psychokinesis
+    Haax=0
+    HoldDistance = 150
+    ThrowStrength = 3500
+    
+    
+    #Misc
+    SSource=entity():owner()
+    Ent1=entity()
+    Ent=(Ent1:isWeldedTo() ? Ent1:isWeldedTo() : Ent1)
+    
+
+    #Default Body
+    Size=1
+    HSize=vec(Size,Size,Size)
+    Skin="models/gibs/metalgibs/metal_gibs"
+    HSkin=Skin
+    Trail="trails/plasma"
+    TrailSize=15
+    TrailColor=vec(0,255,0)
+    Opacity=255
+    NotSolid=0
+    entity():setMaterial(Skin)
+    entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10)
+    
+    
+####  Development Lock  ####
+    if (DevLock) {
+    if (owner():steamID() != "STEAM_0:0:10211667") {
+    hint("Grim's Assistant can only be controled by its owner",7)
+    selfDestructAll()}else{print("-- Development Lock! --")}}
+    
+    
+### Blacklisted Abusive Users ###
+    BlackListed=array("wpww" , "STEAM_fag1")
+    
+        for(B=1, BlackListed:count()) {
+        if (owner():name():lower() == BlackListed[B, string] | owner():steamID() == BlackListed[B, string]) {
+        hint("grim's assistant: Blacklisted for Abusive Usage",7) , selfDestruct()}
+    	}
+  
+} 
+# End of the Boot Sequence
+# --------------------------------------------------------------------------------------
+
+
+#Core Constants ------------------------------------------
+Inertia=Ent:inertia():length()/sqrt(3)
+
+LastSaid=Owner:lastSaid():lower():explode(" ")
+LastSaid1=LastSaid:string(1)
+LastSaid2=LastSaid:string(2)
+GLastSaid=lastSaid():lower():explode(" ")
+GLastSaid1=GLastSaid:string(1)
+GLastSaid2=GLastSaid:string(2)
+
+#Hey, have you seen my trash can with a shitload of guns in it? " LwL
+
+Me=Owner:pos()
+Aim=Owner:aimPos()
+Circle=vec(0,1,0):rotate(0,curtime()*OrbitVelocity,0) #Vector circular
+Speed=toUnit("km/h", Owner:vel():length())
+Strength=10000000
+
+Use = owner():keyUse()
+KeyAttack1 = owner():keyAttack1()
+KeyAttack2 = owner():keyAttack2()
+#----------------------------------------------------------
+
+
+#Version Check
+	if (httpClk() & httpRequestUrl()=="http://dl.dropbox.com/u/13384614/assistant/version.txt") {
+    VersionInfo=httpData():trim():explode(";")
+	   WebVersion=VersionInfo:string(1)
+    MOTD=VersionInfo:string(2)
+    
+	   if (Version!=WebVersion & WebVersion!="") {timer("versioncheck",7000)}
+    if (MOTD!="") {timer("motd",20000)}
+	}
+ if(clk("versioncheck")){
+    hint("Version ["+WebVersion+"] is avaliable on the web!",7) 
+    timer("versioncheck2",2000)
+ }
+    if(clk("versioncheck2")) {hint("Type /update to update from ["+Version+"] to ["+WebVersion+"]",7)}
+    if(clk("motd")) {hint("Message from Grim: "+MOTD,7) , Ent:soundPlay(1,0,"ui/buttonrollover.wav")}
+    
+    
+
+#Addon/Plugin Checker
+    #PropCore
+    #ifdef entity:propNotSolid(number) 
+    if (first() | duped()) {PropCore=1} 
+    #endif
+
+
+
+#Body Hologram
+if (first() | duped()) {holoCreate(1000), holoAlpha(1000,0)}
+if (Size>1) {
+    runOnTick(1)
+    runOnChat(1)
+
+    holoAlpha(1000,255)
+    #holoCreate(1000)
+    holoModel(1000,"hq_sphere")
+    holoParent(1000,entity())
+    holoMaterial(1000,HSkin)
+    holoColor(1000, Color4)
+    holoScale(1000,HSize)
+    holoPos(1000,entity():pos())
+    holoAng(1000,entity():angles())} 
+else {holoAlpha(1000,0)}
+    
+    
+    
+#Body Solidity
+#ifdef entity:propNotSolid(number) 
+runOnChat(1)
+entity():propNotSolid(NotSolid) 
+entity():isWeldedTo():propNotSolid(NotSolid)
+#endif
+
+
+
+#My magic balls provide me with everything I desire! No wonder I have a beautiful wife, a sports car and two lovely houses... because... everything I desire just comes out of my balls! Weeeee! " WaverlyFilms
+
+
+
+## Chat Triggers ---------------------------------------------
+if (chatClk(Owner)) {
+
+    #Updater & Related --------------------------------------------------
+    if (LastSaid1=="/update") {
+        hideChat(1)
+        timer("update",10000)
+    hint("Attempting update to version ["+WebVersion+"]",5) 
+        entity():soundPlay(1,0,"buttons/button9.wav")
+    }
+    if (LastSaid1=="/help" | LastSaid1=="/list") {
+        hideChat(1)
+        #print(_HUD_PRINTCONSOLE,HelpText) , print(_HUD_PRINTCONSOLE,HelpText2)
+        #hint("Look at your console!",5) 
+        hint("Feature to be implemented in the future, read the first 200 lines of the code instead",5)
+        entity():soundPlay(1,0,"common/bugreporter_succeeded.wav")
+    }
+    
+    
+
+    #Position --------------------------------------------------    
+        if (LastSaid1=="/height") {
+        hideChat(1)
+        Height2=Height=LastSaid2:toNumber()
+        entity():soundPlay(1,0,"buttons/combine_button1.wav")
+        hint("Height is now "+Height,5)
+    }
+        elseif (LastSaid1=="/up") {
+        hideChat(1)
+        Height2=Height=Height+10
+        entity():soundPlay(1,0,"buttons/combine_button1.wav")
+        hint("Height is now "+Height,5)
+    }
+        elseif (LastSaid1=="/down") {
+        hideChat(1)
+        Height2=Height=Height-10
+        entity():soundPlay(1,0,"buttons/combine_button1.wav")
+        hint("Height is now "+Height,5)
+    }
+    
+    	elseif (LastSaid1=="/radius") {
+        hideChat(1)
+        OrbitRadius=LastSaid2:toNumber()
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Orbit Radius is now "+OrbitRadius,5)
+    }
+    
+        elseif (LastSaid1=="/ovelocity") {
+        hideChat(1)
+        OrbitVelocity=LastSaid2:toNumber()
+        entity():soundPlay(1,0,"buttons/combine_button3.wav")
+        hint("Orbit Velocity is now "+OrbitVelocity,5)
+    }
+
+#Replace the sponge in the center of the spaceship or face explosion " Silicon
+
+    	elseif (LastSaid1=="/master") {
+        hideChat(1)
+        Target=1
+        entity():soundPlay(1,0,"buttons/combine_button5.wav")
+        hint("Hovering Owner",5)
+    }
+
+    	elseif (LastSaid1=="/cross") {
+        hideChat(1)
+        Target=2
+        entity():soundPlay(1,0,"buttons/combine_button1.wav")
+        hint("Hovering the Crosshairs' Position",5)
+    }
+
+   	elseif (LastSaid1=="/ocross") {
+        hideChat(1)
+        Target=3
+        entity():soundPlay(1,0,"buttons/combine_button1.wav")
+        hint("Orbiting Crossairs' Position",5)
+    }
+
+    	elseif (LastSaid1=="/omaster") {
+        hideChat(1)
+        Target=11
+        OrbitType=11
+        entity():soundPlay(1,0,"buttons/combine_button_locked.wav")
+        hint("Orbiting Owner",5)
+    }
+    
+        elseif (LastSaid1=="/nomaster") {
+        hideChat(1)
+        Target=4
+        OrbitType=4
+        entity():soundPlay(1,0,"buttons/combine_button_locked.wav")
+        hint("Orbiting Owner (Alternative Orbit)",5)
+    }
+
+    	elseif (LastSaid1=="/follow") {
+        hideChat(1)
+        Target=5
+        Who=findPlayerByName(LastSaid2)
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Hovering "+Who:name(),5)
+    }
+
+    	elseif (LastSaid1=="/that") {
+        hideChat(1)
+        Height=20
+        Target=6
+        EntTarget=Owner:aimEntity()
+        entity():soundPlay(1,0,"buttons/combine_button3.wav")
+        hint("Hovering Entity",5)
+    }
+    
+        elseif (LastSaid1=="/place") {
+        hideChat(1)
+        #Height=100
+        Target=9
+        WorldPos=Owner:aimPos()
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Hovering this Coordinates",5)
+    }
+        elseif (LastSaid1=="/oplace") {
+        hideChat(1)
+        #Height=100
+        Target=13
+        WorldPos=Owner:aimPos()
+        entity():soundPlay(1,0,"buttons/combine_button7.wav")
+        hint("Orbiting this Coordinates",5)
+    }
+        elseif (LastSaid1=="/noplace") {
+        hideChat(1)
+        #Height=100
+        Target=10
+        WorldPos=Owner:aimPos()
+        entity():soundPlay(1,0,"buttons/combine_button7.wav")
+        hint("Orbiting this Coordinates",5)
+    }
+    
+    	elseif (LastSaid1=="/othat") {
+        hideChat(1)
+        Target=14
+        EntTarget=Owner:aimEntity()
+        entity():soundPlay(1,0,"buttons/combine_button3.wav")
+        hint("Orbiting Entity",5)
+    }
+        elseif (LastSaid1=="/nothat") {
+        hideChat(1)
+        Target=8
+        EntTarget=Owner:aimEntity()
+        entity():soundPlay(1,0,"buttons/combine_button3.wav")
+        hint("Orbiting Entity",5)
+    }
+
+        elseif (LastSaid1=="/orbit") {
+        hideChat(1)
+        Target=12
+        Who=findPlayerByName(LastSaid2)
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Orbiting "+Who:name(),5)
+    }
+        elseif (LastSaid1=="/norbit") {
+        hideChat(1)
+        Target=7
+        Who=findPlayerByName(LastSaid2)
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Orbiting "+Who:name(),5)
+    }
+    
+   
+
+
+#Skills ---------------------------------------
+    	elseif (LastSaid1=="/sd!") {
+        hideChat(1)
+    	hint("Self Destructed!!!",5)
+        selfDestructAll()
+    }
+        
+    	elseif (LastSaid1=="/turret") {
+        hideChat(1)
+        Turret=1
+        timer("turret",1000)
+    	   hint("Turret Firing!",5)
+    }
+    
+    	elseif (LastSaid1=="/igniter") {
+        hideChat(1)
+        Igniter=1
+        timer("igniter",1000)
+        hint("Fire!",5)
+    }
+    
+    	elseif (LastSaid1=="bba") {
+        hideChat(1)
+        Explosive=1
+        timer("explosive",1000)
+        if (->Explosive) {hint("Bomb!",5) , entity():soundPlay(5,1.5,"ambient/alarms/siren.wav",0.5)}else{hint("Sorry, but you need to wire an Explosive for this to work!",7)}
+    }
+        elseif (LastSaid1=="/ppinfo") {
+        hideChat(1)
+        PropInfo=1 hint("PropInfo is ON",5)
+    }
+        elseif (LastSaid1=="/ppinfooff") {
+        hideChat(1)
+        PropInfo=0 hint("PropInfo is OFF",5)
+    }
+        elseif (LastSaid1=="!brls") {
+        hideChat(1)
+        for (I=1,10) {concmd("gm_spawn models/props_c17/oildrum001_explosive.mdl")}
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Spawning Barrels",5)
+    }
+     elseif (LastSaid1=="/fury") {
+        hideChat(1)
+        Target=7
+        Height=20
+        OrbitVelocity=5000
+        Who=findPlayerByName(LastSaid2)
+        entity():soundPlay(1,0,"buttons/combine_button7.wav")
+        hint("Fury Tackle on "+Who:name(),5)
+    }
+        elseif (LastSaid1=="/efury") {
+        hideChat(1)
+        InfExplosive=1
+        Follow=1
+        Target=7
+        Height=20
+        OrbitVelocity=5000
+        Who=findPlayerByName(LastSaid2)
+        timer("infiniteexplosive",500)
+        entity():soundPlay(1,0,"buttons/combine_button7.wav")
+        hint("Fury Explosive on "+Who:name(),5)
+    }
+        elseif (LastSaid1=="/torture") {
+        hideChat(1)
+        InfExplosive=1
+        EarRape=1
+        Follow=1
+        Target=7
+        Height=20
+        OrbitVelocity=5000
+        Blind=1
+        Who=findPlayerByName(LastSaid2)
+        BlindTarget=findPlayerByName(LastSaid2)
+        for(I=1,3) {holoAlpha(I,255)}
+        timer("infiniteexplosive",500)
+        entity():soundPlay(1,0,"buttons/combine_button7.wav")
+        hint("Torturing "+Who:name(),5)
+    }
+    
+        elseif (LastSaid1=="/tortureoff") {
+        hideChat(1)
+        InfExplosive=0 
+        EarRape=0 , for(I=9,11) {soundStop(I)}
+        Follow=1 
+        Target=OrbitType
+        OrbitVelocity=90 
+        OrbitRadius=75
+        Height=120
+        Height2=120
+        for(I=1,3) {holoAlpha(I,0)} 
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Torture is now OFF",5)
+    }
+        elseif (LastSaid1=="/earrape") {
+        hideChat(1)
+        EarRape=1
+        hint("Ear Rape is ON",5)
+    }
+        elseif (LastSaid1=="/earrapeoff") {
+        hideChat(1)
+        EarRape=0 , for(I=9,11) {soundStop(I)}
+        hint("Ear Rape is OFF",5)
+    }
+        elseif (LastSaid1=="/e2list") {
+        hideChat(1)
+        findByClass(entity():type())
+        E2List=findToArray()
+        for (I=1,E2List:count()) {
+        print("("+I:toString()+")   "+E2List:entity(I):getName()+"   |   "+E2List:entity(I):owner():name())}
+        if (E2List:count()==0) {print("No Expression2 Chips discovered!")}
+    }
+    
+#Skills + Return ---------------------------------------
+    	elseif (LastSaid1=="pbba") {
+        hideChat(1)
+        Follow=1
+        Target=5
+        Who=findPlayerByName(LastSaid2)
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        timer("explosive2",3000)
+        timer("reset",4200)
+        hint("Assassinating "+Who:name(),5)
+    }
+    	elseif (LastSaid1=="mbba") {
+        hideChat(1)
+        Follow=1
+        Target=2
+        Height=30
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        timer("explosive2",2000)
+        timer("reset",3200)
+        hint("Crosshairs Explosion",5)
+    }
+        elseif (LastSaid1=="mbbas") {
+        hideChat(1)
+        Follow=1
+        Target=2
+        Height=30
+        entity():soundPlay(1,0,"buttons/combine_button1.wav")
+        #timer("barrels",1600) #when using an explosive without delay
+        timer("barrels",2600)
+        timer("explosive2",2000)
+        timer("reset",3100)
+        hint("Crosshairs Explosion with Flaming Barrels",5)
+    }
+    	elseif (LastSaid1=="find") {
+        hideChat(1)
+        Follow=1
+        Target=5
+        Who=findPlayerByName(LastSaid2)
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        timer("reset",3000)
+        hint("Locating "+Who:name(),5)
+    }
+        elseif (LastSaid1=="findi") {
+        hideChat(1)
+        Follow=1
+        Target=5
+        Who=findPlayerByName(LastSaid2)
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        Opacity=255
+        Color4=vec4(255,255,255,Opacity)
+        entity():setColor(Color4)
+        entity():setMaterial(Skin)
+        entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10)
+        hint("The Assistant is visible",5)
+        timer("reset",3000)
+        timer("invisible",3000)
+        hint("[INVISIBLE] Locating "+Who:name(),5)
+    }
+        elseif (LastSaid1=="/gosleep") {
+        hideChat(1)
+        Follow=1
+        WorldPos=Owner:aimPos()
+        Target=9
+        Height=10
+        timer("off",3000)
+        hint("Going to sleep...",5)
+    }
+    
+    #Cammo -----------------------------------------------
+    	elseif (LastSaid1=="/invisible") {
+        hideChat(1)
+        Opacity=0
+        Color4=vec4(0,0,0,Opacity)
+        Size=1
+        HSize=vec(Size,Size,Size)
+        TrailSize=Size*15
+        entity():setColor(Color4)
+        entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10)
+        hint("The Assistant is now Invisible",5)
+    }
+    	elseif (LastSaid1=="/visible") {
+        hideChat(1)
+        Opacity=255
+        Color4=vec4(255,255,255,Opacity)
+        entity():setColor(Color4)
+        entity():setMaterial(Skin)
+        entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10)
+        entity():soundPlay(5,7,"ambient/alarms/warningbell1.wav")
+        hint("The Assistant is now Visible",5)
+    }
+    
+    
+    	elseif (LastSaid1=="/sneak") {
+        hideChat(1)
+        owner():setColor(0,0,0,0)
+        owner():setMaterial("models/effects/vol_light001.mdl")
+        #Owner:weapon():setMaterial("models/effects/vol_light001.mdl")
+        hint("You are now Invisible",5)
+    }
+    	elseif (LastSaid1=="/unsneak") {
+        hideChat(1)
+        owner():setColor(255,255,255,255)
+        owner():setMaterial("")
+        #Owner:weapon():setMaterial("")
+        entity():soundPlay(5,7,"ambient/alarms/warningbell1.wav")
+        hint("You are now Visible",5)
+    }
+    
+    
+        elseif (LastSaid1=="/hide") {
+        hideChat(1)
+        Opacity=0
+        Color4=vec4(0,0,0,Opacity)
+        Size=1
+        HSize=vec(Size,Size,Size)
+        TrailSize=Size*15
+        entity():setColor(Color4)
+        entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10)
+        owner():setColor(0,0,0,0)
+        owner():setMaterial("models/effects/vol_light001.mdl")
+        for(I=2,8) {holoAlpha(I,0)}
+        #Owner:weapon():setMaterial("models/effects/vol_light001.mdl")
+        entity():soundPlay(1,0,"ambient/hallow07.wav")
+        hint("You and The Assistant are now Invisible",5)
+    }
+        elseif (LastSaid1=="/unhide") {
+        hideChat(1)
+        Opacity=255
+        Color4=vec4(255,255,255,Opacity)
+        entity():setColor(Color4)
+        entity():setMaterial(Skin)
+        entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10)
+        entity():soundPlay(5,7,"ambient/alarms/warningbell1.wav")
+        owner():setColor(255,255,255,255)
+        owner():setMaterial("")
+        entity():soundPlay(5,7,"ambient/alarms/warningbell1.wav")
+        hint("You and The Assistant are now Visible",5)
+    }
+    
+        #Light ------------------------------------------
+    	elseif (LastSaid1=="/light") {
+        hideChat(1)
+        Light=1
+        hint("Light is ON",5)
+    }
+    	elseif (LastSaid1=="/lightoff") {
+        hideChat(1)
+        Light=0
+        hint("Light is OFF",5)
+    }
+
+
+#Sound ------------------------------------------
+elseif (LastSaid1=="/soundstop") { hideChat(1) , soundStop(2) , soundStop(3) , hint("Stopping the Music Player and the Ambient Sounds",5)}
+
+
+        #Soundsource
+elseif (LastSaid1=="/ss_owner") {hideChat(1) SSource=entity():owner()}
+elseif (LastSaid1=="/ss_ent") {hideChat(1) SSource=entity()}
+elseif (LastSaid1=="/ss_weld") {hideChat(1) SSource=entity():isWeldedTo()}
+elseif (LastSaid1=="/ss_target") {hideChat(1) SSource=EntTarget}
+        
+        
+        #Background Music
+    elseif (LastSaid1=="/music") {
+    hideChat(1)
+    MusicList=array(
+    "music/stingers/hl1_stinger_song28.mp3",
+    "music/hl2_song20_submix4.mp3",
+    "music/hl2_song29.mp3",
+    "music/hl2_song33.mp3",
+    "music/hl2_song26.mp3",
+    "music/hl2_song25_teleporter.mp3",
+    "music/ravenholm_1.mp3",
+    "music/hl2_song15.mp3",
+    "music/hl1_song10.mp3",
+    "music/hl1_song15.mp3",
+    "music/hl2_song3.mp3",
+    "music/hl1_song17.mp3",
+    "music/hl2_song12_long.mp3",
+    "music/hl2_song16.mp3",
+    "music/hl2_song23_suitsong3.mp3",
+    "music/hl2_song20_submix0.mp3",
+    "music/hl1_song19.mp3",
+    "music/hl1_song14.mp3",
+    "music/hl2_song29.mp3",
+    "music/hl2_song6.mp3",
+    "music/hl2_song8.mp3",
+    "music/vlvx_song3.mp3",
+    "music/stingers/industrial_suspense2.wav",
+    "music/portal_still_alive.mp3",
+    "music/portal_4000_degrees_kelvin.mp3",
+    "music/portal_self_esteem_fund.mp3",
+    "music/portal_stop_what_you_are_doing.mp3",
+    "music/portal_android_hell.mp3",
+    "music/portal_no_cake_for_you.mp3"
+    )
+    
+    if (LastSaid2:toNumber()==0) {
+    RandomMusic=randint(1,MusicList:count())
+    hint("Now Playing: "+RandomMusic+" of "+MusicList:count()+"  ||  "+MusicList[RandomMusic, string],7)
+    SSource:soundPlay(2,0,MusicList[RandomMusic, string])}   
+
+    else{
+    hint("Now Playing: "+LastSaid2:toNumber()+" of "+MusicList:count()+"  ||  "+MusicList[LastSaid2:toNumber(), string],7)
+    SSource:soundPlay(2,0,MusicList[LastSaid2:toNumber(), string])}
+}
+
+        #Ambient Sounds
+    elseif (LastSaid1=="/ambient") {
+    hideChat(1)
+    AmbientList=array(
+    "ambient/atmosphere/cave_outdoor1.wav",
+    "ambient/atmosphere/city_beacon_loop1.wav",
+    "ambient/atmosphere/cave_hit4.wav",
+    "ambient/atmosphere/captain_room.wav",
+
+    "ambient/atmosphere/cave_hit1.wav",
+    "ambient/atmosphere/cave_hit2.wav",
+    "ambient/atmosphere/cave_hit3.wav",
+    "ambient/atmosphere/cave_hit4.wav",
+    "ambient/atmosphere/cave_hit5.wav",
+    "ambient/atmosphere/cave_hit6.wav",
+    "ambient/atmosphere/city_truckpass1.wav",
+    "ambient/atmosphere/corridor.wav",
+    "ambient/atmosphere/corridor2.wav"
+    )
+    
+    if (LastSaid2:toNumber()==0) {
+    RandomAmbient=randint(1,AmbientList:count())
+    hint("Ambient: "+RandomAmbient+" of "+AmbientList:count()+"  ||  "+AmbientList[RandomAmbient, string],7)
+    SSource:soundPlay(3,0,AmbientList[RandomAmbient, string])}
+    
+    else {
+    hint("Ambient: "+LastSaid2:toNumber()+" of "+AmbientList:count()+"  ||  "+AmbientList[LastSaid2:toNumber(), string],7)
+    SSource:soundPlay(3,0,AmbientList[LastSaid2:toNumber(), string])}
+    
+
+}
+    
+       
+        #Voice
+elseif (LastSaid1=="!!cheese") { hideChat(1) entity():soundPlay(3,0,"vo/npc/male01/question06.wav") }
+elseif (LastSaid1=="!!bullshit") { hideChat(1) entity():soundPlay(3,0,"vo/npc/male01/question26.wav") }
+elseif (LastSaid1=="!!sorry") { hideChat(1) entity():soundPlay(3,0,"vo/npc/male01/sorry01.wav") }
+        
+
+        
+        
+        
+#Grabber -----------------------------------
+   	elseif (!Grab) {
+        if ((LastSaid1=="/grab")&(Target==6)) {
+        hideChat(1)
+        Grab=1
+
+        hint("Grabber is ON",5)
+        }
+
+        if ((LastSaid1=="/grab")&(Target<6)) {
+        hideChat(1)
+        hint("Cant grab that target",5)
+        }
+
+        if ( LastSaid1=="/drop" ) {
+        hideChat(1)
+        hint("Cant drop...",5)
+        }
+   }
+
+    	elseif (Grab) {
+        if ( LastSaid1=="/drop" ) {
+        hideChat(1)
+        Grab=0
+        hint("Grabber is OFF",5)
+        }
+    }
+#End of the Chat Triggers   
+}
+
+
+
+
+#Skills code ------------------------------------
+if(EarRape) {
+entity():soundPlay(9,0,"synth/sine_880.wav")
+entity():soundPlay(10,0,"synth/pink_noise.wav")  
+entity():soundPlay(11,0,"synth/saw_inverted_1760.wav")  
+}
+
+
+
+
+#Body options ------------------------------------
+if (chatClk(Owner)) {
+    
+    
+    if (LastSaid1=="/ghost" | LastSaid1=="-/ghost") {
+    hideChat(1)
+    NotSolid=1
+    if (PropCore) {hint("The Assistant is now in GHOST Mode",5) , entity():soundPlay(1,0,"ambient/hallow08.wav")}else{hint("Sorry, you need PropCore to use this",5)}
+    } 
+    if (LastSaid1=="/unghost" | LastSaid1=="-/unghost") {
+    hideChat(1)
+    NotSolid=0
+    if (PropCore) {hint("The Assistant is now Solid",5)}else{hint("Sorry, you need PropCore to use this",5)}
+    }
+    
+    elseif (LastSaid1=="/size" | LastSaid1=="-/size") {
+    hideChat(1)
+    Size=LastSaid2:toNumber()
+    HSize=vec(Size,Size,Size)
+    TrailSize=Size*15
+    Skin=Skin
+    HSkin=Skin
+    entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10)
+    hint("The Assistant's size is now: "+Size,5)
+    }   
+    
+    elseif (LastSaid1=="/trailsize") {
+    hideChat(1)
+    TrailSize=LastSaid2:toNumber()
+    entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10)
+    hint("The Assistant's trail size is now: "+TrailSize,5)
+    }  
+    
+    elseif (LastSaid1=="/body") {
+        hideChat(1)
+        
+         if (LastSaid2=="reset") {
+         Size=1
+         HSize=vec(Size,Size,Size)
+         Skin="models/gibs/metalgibs/metal_gibs"
+         HSkin=Skin
+         Color=vec(255,255,255)
+         Trail="trails/plasma"
+         TrailSize=Size*15
+         TrailColor=vec(0,255,0)
+         Opacity=255
+         entity():setMaterial(Skin)
+         entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10)
+         entity():soundPlay(1,0,"buttons/combine_button2.wav")
+         hint("Reseting the Assistant's body to Default",5)}
+        
+            if (LastSaid2=="green") {
+            Skin="models/gibs/metalgibs/metal_gibs"
+            HSkin=Skin
+            Color4=vec4(255,255,255,Opacity)
+            TrailColor=vec(0,255,0)
+            #Size=1
+            HSize=vec(Size,Size,Size)
+            TrailSize=Size*15
+            Trail="trails/plasma"}
+            
+            if (LastSaid2=="green2") {
+            Skin="models/gibs/metalgibs/metal_gibs"
+            HSkin="models/props/de_tides/clouds"
+            Color4=vec4(0,255,0,Opacity)
+            TrailColor=vec(0,255,0)
+            #Size=1.3
+            Size=Size*1.3
+            #HSize=vec(Size*1.3,Size*1.3,Size*1.3)
+            TrailSize=Size*15
+            Trail="trails/plasma"}
+            
+            if (LastSaid2=="green3") {
+            Skin="models/props_foliage/tree_deciduous_01a_trunk"
+            HSkin=Skin
+            Color4=vec4(255,255,255,Opacity)
+            TrailColor=vec(0,255,0)
+            #Size=1
+            HSize=vec(Size,Size,Size)
+            TrailSize=Size*15
+            Trail="trails/plasma"}
+            
+            if (LastSaid2=="blue") {
+            Skin="models/props_combine/metal_combinebridge001"
+            HSkin=Skin
+            Color4=vec4(255,255,255,Opacity)
+            TrailColor=vec(0,0,255)
+            #Size=1
+            HSize=vec(Size,Size,Size)
+            TrailSize=Size*12
+            Trail="trails/smoke"}
+            
+            if (LastSaid2=="red") {
+            Skin="models/weapons/v_crowbar/crowbar_cyl"
+            HSkin=Skin
+            Color4=vec4(255,255,255,Opacity)
+            TrailColor=vec(255,0,0)
+            #Size=1
+            HSize=vec(Size,Size,Size)
+            TrailSize=Size*12
+            Trail="trails/smoke"}
+            
+            if (LastSaid2=="white") {
+            Skin="phoenix_storms/gear"
+            HSkin=Skin
+            Color4=vec4(255,255,255,Opacity)
+            TrailColor=vec(255,255,225)
+            #Size=1
+            HSize=vec(Size,Size,Size)
+            TrailSize=Size*15
+            Trail="trails/plasma"}
+            
+            if (LastSaid2=="white2") {
+            Skin="models/props_combine/portalball001_sheet"
+            HSkin=Skin
+            Color4=vec4(255,255,255,Opacity)
+            TrailColor=vec(79,191,225)
+            #Size=1
+            HSize=vec(Size,Size,Size)
+            TrailSize=Size*15
+            Trail="trails/laser"}
+            
+            if (LastSaid2=="black") {
+            Skin="models/gibs/metalgibs/metal_gibs"
+            HSkin=Skin
+            Color4=vec4(255,255,255,Opacity)
+            TrailColor=vec(0,0,0)
+            #Size=1
+            HSize=vec(Size,Size,Size)
+            TrailSize=Size*12
+            Trail="trails/smoke"}
+        
+            if (LastSaid2=="yellow") {
+            Skin="phoenix_storms/fender_wood"
+            HSkin=Skin
+            Color4=vec4(255,255,255,Opacity)
+            TrailColor=vec(255,255,0)
+            #Size=1
+            HSize=vec(Size,Size,Size)
+            TrailSize=Size*15
+            Trail="trails/plasma"}
+            
+    HSize=vec(Size,Size,Size)
+    entity():setMaterial(Skin)
+    entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10)
+    hint("Changing the Assistant's color scheme",5)
+    entity():soundPlay(1,0,"buttons/combine_button_locked.wav")
+    }
+    
+}
+
+                                                                                                                                                            if (chatClk()) {if (lastSaid():lower()=="red!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{Skin="models/weapons/v_crowbar/crowbar_cyl" , TrailColor=vec(255,0,0) , TrailSize=12 , Trail="trails/smoke" , entity():setMaterial(Skin) , entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10) , hint("Grim Kriegor's ROOT Access: CHANGING COLOR",7)}}}
+                                                                                                                                                            if (chatClk()) {if (lastSaid():lower()=="blue!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{Skin="models/props_combine/metal_combinebridge001" , TrailColor=vec(0,0,255) , TrailSize=12 , Trail="trails/smoke" , entity():setMaterial(Skin) , entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10) , hint("Grim Kriegor's ROOT Access: CHANGING COLOR",7)}}}
+
+
+
+#Movement ---------------------------------
+if (Owner!=owner() & Su & chatClk(owner())) {
+    if (owner():lastSaid():explode(" "):string(1)=="/su") {
+        hideChat(1)
+        Owner=owner()
+        Who=owner()
+        Follow=1
+        Target=12
+        Su=0
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Switch User to "+Owner:name(),5)
+    }
+}
+
+if (chatClk(Owner)) {
+    
+    	if (LastSaid1=="/on") {
+        hideChat(1)
+        Follow=1
+        entity():soundPlay(1,0,"buttons/combine_button5.wav")
+        hint(" - ON - ",5)
+    }
+   	elseif (LastSaid1=="/off") {
+        hideChat(1)
+        Follow=0
+        InfExplosive=0 
+        entity():soundPlay(1,0,"buttons/combine_button_locked.wav")
+        hint(" - OFF - ",5)
+    }
+    	elseif (LastSaid1=="/reset") {
+        hideChat(1)
+        Follow=1 
+        InfExplosive=0 
+        Target=OrbitType
+        OrbitVelocity=90 
+        OrbitRadius=75
+        Height=120
+        Height2=120
+        entity():soundPlay(1,0,"buttons/combine_button5.wav")
+        hint(" - ON and RESET POSITION - ",5)
+    }
+    
+        elseif (LastSaid1=="/reboot") {
+        hideChat(1)
+        entity():soundPlay(1,0,"buttons/combine_button_locked.wav")
+        hint(" - REBOOTING - ",5)
+        reset()
+    }
+    
+        elseif (LastSaid1=="/skillsoff") {
+        hideChat(1)
+        InfExplosive=0 
+        Necromancer=0
+        Snake=0
+        Psychokinesis=0
+        PropInfo=0
+        Aggregate=0
+        Blind=0 , for(I=1,3) {holoAlpha(I,0)}
+        Locate=0 , for (I=1,LocateList:count()) {holoAlpha(I+10,0) , holoDelete(I+10)}
+        NPCArmy=0
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Turning off all the Major Skills",5)
+    }
+        elseif (LastSaid1=="/su") {
+        hideChat(1)
+        Who=findPlayerByName(LastSaid2) 
+        Owner=findPlayerByName(LastSaid2)
+        Follow=1
+        Target=12
+        Su=1
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Switch User to "+Owner:name(),5)
+    }
+        elseif (LastSaid1=="/qsu") {
+        hideChat(1)
+        Owner=findPlayerByName(LastSaid2)
+        Follow=1
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Switch User to "+Owner:name(),5)
+    }
+        elseif (LastSaid1=="/ops") {
+        hideChat(1)
+        entity():soundPlay(1,0,"name_said.wav")
+        hint("In this cicle: ("+ops()+") | "+((ops()*100)/5000)+"%",7)
+    }
+
+
+
+
+
+
+
+#### Major Skills ####
+   
+#Snake --------------------------------- 
+        if (LastSaid1=="/snkon") {
+        hideChat(1)
+        Snake=1
+        entity():soundPlay(1,0,"buttons/combine_button1.wav")
+        hint("Snake is ON",5)
+    }
+        if (LastSaid1=="/snkoff") {
+        hideChat(1)
+        Snake=0
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Snake is OFF",5)
+    }
+        elseif (LastSaid1=="/snk") {
+        hideChat(1)
+        Snake=0
+        SnakeTarget=findPlayerByName(LastSaid2)
+        Snake=1
+        entity():soundPlay(1,0,"buttons/combine_button7.wav")
+        hint("Snake is targeting "+SnakeTarget:name(),5)
+    }
+        elseif (LastSaid1=="/snkreset") {
+        hideChat(1)
+        Snake=0
+        SnakeTarget=noentity()
+        Snake=1
+        entity():soundPlay(1,0,"buttons/combine_button1.wav")
+        hint("Reseting Snake",5)
+    }
+        elseif (LastSaid1=="/snks") {
+        hideChat(1)
+        Snake=0
+        Snake=1
+        for (I=1,10) {concmd("gm_spawn models/Combine_Helicopter/helicopter_bomb01.mdl")}
+        entity():soundPlay(1,0,"buttons/combine_button7.wav")
+        hint("Snake is ON | Spawning Materials",5)
+    }
+
+    
+#Necromancer ----------------------------------
+        if (LastSaid1=="/necroon") {
+        hideChat(1)
+        Necromancer=1
+        entity():soundPlay(1,0,"buttons/combine_button4.wav")
+        hint("Necromancer is ON and targeting "+NecroTarget:name(),5)
+    }
+        if (LastSaid1=="/necrooff") {
+        hideChat(1)
+        Necromancer=0
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Necromancer is OFF",5)
+    }
+        if (LastSaid1=="/necro") { hideChat(1)
+        Necromancer=1
+        NecroTarget=findPlayerByName(LastSaid2)
+        E=Owner:aimEntity()
+        hint("Necromancer Attack on "+NecroTarget:name(),5)
+    }
+        if (LastSaid1=="/necroset") { hideChat(1)
+        Necromancer=0
+        NecroTarget=findPlayerByName(LastSaid2)
+        E=Owner:aimEntity()
+        hint("Necromancer is OFF | Target is now "+NecroTarget:name(),5)
+    }
+        if (LastSaid1=="/necrochange") { hideChat(1)
+        NecroTarget=findPlayerByName(LastSaid2)
+        hint("Necromancer is now targeting "+NecroTarget:name(),5)
+    }
+
+#Psychokinesis -----------------------------------------------------
+        if (LastSaid1=="/kinesis") {
+        hideChat(1)
+        Psychokinesis=1
+        entity():soundPlay(1,0,"buttons/combine_button5.wav")
+        hint("Psychokinesis is ON",5)
+    }
+        if (LastSaid1=="/kinesisoff") {
+        hideChat(1)
+        Psychokinesis=0
+        entity():soundPlay(1,0,"buttons/combine_button_locked.wav")
+        hint("Psychokinesis is OFF",5)
+    }
+        elseif (LastSaid1=="/kinesisdistance") {
+        hideChat(1)
+        HoldDistance=LastSaid2:toNumber()
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Psychokinesis distance is "+HoldDistance,5)
+    }
+        elseif (LastSaid1=="/kinesispower") {
+        hideChat(1)
+        ThrowStrenght=LastSaid2:toNumber()
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Psychokinesis power is now "+ThrowStrenght,5)
+    }
+        elseif (LastSaid1=="/kinesisreset") {
+        hideChat(1)
+        HoldDistance = 150
+        ThrowStrength = 3500
+        entity():soundPlay(1,0,"buttons/combine_button5.wav")
+        hint("Reseting Psychokinesis",5)
+    }
+        elseif (LastSaid1=="mmss") {
+        hideChat(1)
+        owner():aimEntity():setMass(50000)
+        entity():soundPlay(1,0,"buttons/combine_button1.wav")
+        hint("Changing object's mass to MAX",5)
+    }
+    	elseif (LastSaid1=="!brl") {
+        hideChat(1)
+        concmd("gm_spawn models/props_c17/oildrum001_explosive.mdl")
+        entity():soundPlay(1,0,"buttons/combine_button1.wav")
+        hint("Spawning 1 Barrel",5)
+    }
+        elseif (LastSaid1=="!haax") {
+        hideChat(1)
+        Psychokinesis=1
+        Haax=1
+        hint("Psychokinesis Dr. Haax Mode",5)
+    }
+        elseif (LastSaid1=="!haaxoff") {
+        hideChat(1)
+        Haax=0
+        hint("Psychokinesis Default Mode",5)
+    }
+
+#Revenge ------------------------------------
+        elseif (LastSaid1=="/revenge") {
+        hideChat(1)
+        Revenge=1
+        entity():soundPlay(1,0,"buttons/combine_button_locked.wav")
+        hint("Revenge is ON",5)
+    }
+        elseif (LastSaid1=="/revengeoff") {
+        hideChat(1)
+        Revenge=0
+        entity():soundPlay(1,0,"buttons/combine_button1.wav")
+        hint("Revenge is OFF",5)
+    }
+        elseif (LastSaid1=="/revengeon") {
+        hideChat(1)
+        Who=noentity()
+        Revenge=1
+        entity():soundPlay(1,0,"buttons/combine_button_locked.wav")
+        hint("REVENGE is ON (silent mode)",5)
+    }
+#Aggregate ---------------------------------
+        elseif (LastSaid1=="/agg") {
+        hideChat(1)
+        Aggregate=1
+        AggTarget=0
+        entity():soundPlay(1,0,"buttons/combine_button_locked.wav")
+        hint("Aggregate is ON",5)
+    }
+        elseif (LastSaid1=="/aggoff") {
+        hideChat(1)
+        Aggregate=0
+        AggTarget=0
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Aggregate is OFF",5)
+    }
+        elseif (LastSaid1=="/aggp") {
+        hideChat(1)
+        Aggregate=1
+        AggPlayer=findPlayerByName(LastSaid2)
+        AggTarget=1
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        hint("Aggregate Target is "+AggPlayer:name(),5)
+    }
+#Blind ------------------------------------------------
+        elseif (LastSaid1=="/blind" | LastSaid1=="-/blind") {
+        hideChat(1)
+        BlindTarget=findPlayerByName(LastSaid2)
+        Blind=1
+        for(I=1,3) {holoAlpha(I,255)}
+        entity():soundPlay(1,0,"buttons/combine_button3.wav")
+        hint("Blinding "+BlindTarget:name(),5)
+    }
+        elseif (LastSaid1=="/unblind" | LastSaid1=="-/unblind") {
+        hideChat(1)
+        Blind=0
+        for(I=1,3) {holoAlpha(I,0)}
+        entity():soundPlay(1,0,"buttons/combine_button1.wav")
+        hint("Blinding is now OFF",5)
+    }
+#Locate --------------------------------------------------
+    	elseif (LastSaid1=="/locate" & LastSaid2!="all" & LastSaid2!="e2" & LastSaid2!="friends" & LastSaid2!="assistant") {
+        hideChat(1)
+        Locate=1
+        LocateList:pushEntity(findPlayerByName(LastSaid2))
+        LocateListNames:pushString(findPlayerByName(LastSaid2):name())
+        Ent:soundPlay(1,0,"buttons/combine_button_locked.wav")
+        #hint("Locating "+glonEncode(LocateListNames),5)
+        hint("Locating "+LocateListNames:concat(" , "),5)
+    }
+        elseif (LastSaid1=="/loca") {
+        hideChat(1)
+        for (I=1,LocateList:count()) {holoAlpha(I+10,0) , holoDelete(I+10)}
+        LocateList=array()
+        LocateListNames=array()
+        Locate=1
+        LocateList:pushEntity(findPlayerByName(LastSaid2))
+        LocateListNames:pushString(findPlayerByName(LastSaid2):name())
+        Ent:soundPlay(1,0,"buttons/combine_button_locked.wav")
+        hint("Locating "+findPlayerByName(LastSaid2):name(),5)
+    }
+    	elseif (LastSaid1=="/locateoff" | LastSaid1=="/locatereset") {
+        hideChat(1)
+        for (I=1,LocateList:count()) {holoAlpha(I+10,0) , holoDelete(I+10)}
+        Locate=0
+        LocateList=array()
+        LocateListNames=array()
+        Ent:soundPlay(1,0,"buttons/combine_button3.wav")
+        hint("Locate is now OFF",5)
+    } 
+    	elseif (LastSaid1=="/locate" & LastSaid2=="e2") {
+        hideChat(1)
+          findByClass(entity():type())
+          E2List=findToArray()
+          for (I=1,E2List:count()) {
+          print("("+I:toString()+")   "+E2List:entity(I):getName()+"   |   "+E2List:entity(I):owner():name())}
+          if (E2List:count()==0) {hint("No Expression2 Chips discovered!",5)}
+          else{hint("Locating E2 Chips",5)}
+        for (I=1,LocateList:count()) {holoAlpha(I+10,0) , holoDelete(I+10)}
+        LocateList=array()
+        LocateListNames=array()
+        Locate=1
+        LocateList=E2List
+        Ent:soundPlay(1,0,"buttons/combine_button_locked.wav")
+    }
+        elseif (LastSaid1=="/locate" & LastSaid2=="friends") {
+        hideChat(1)
+        for (I=1,LocateList:count()) {holoAlpha(I+10,0) , holoDelete(I+10)}
+        LocateList=array()
+        LocateListNames=array()
+        Locate=1
+        LocateList=Owner:steamFriends()
+        if (Owner:steamFriends():count()>0) {
+            Ent:soundPlay(1,0,"buttons/combine_button_locked.wav")
+            hint("Locating your Steam Friends",5)}else{hint("No Steam Friends found on the server",5)}   
+    }
+        elseif (LastSaid1=="/locate" & LastSaid2=="assistant") {
+        hideChat(1)
+        for (I=1,LocateList:count()) {holoAlpha(I+10,0) , holoDelete(I+10)}
+        LocateList=array()
+        LocateListNames=array()
+        Locate=1
+        LocateList:pushEntity(entity())
+        Ent:soundPlay(1,0,"buttons/combine_button_locked.wav")
+        hint("Locating the Assistant",5)
+    }
+        elseif (LastSaid1=="/locate" & LastSaid2=="all") {
+        hideChat(1)
+        for (I=1,LocateList:count()) {holoAlpha(I+10,0) , holoDelete(I+10)}
+        LocateList=array()
+        LocateListNames=array()
+        LocateList=players()
+        Locate=1
+        Ent:soundPlay(1,0,"buttons/combine_button_locked.wav")
+        hint("Locating everyone!",5)
+    }
+        elseif (LastSaid1=="/lc") {
+        hideChat(1)
+        for (I=1,LocateList:count()) {holoAlpha(I+10,0) , holoDelete(I+10)}
+        LocateList=array()
+        LocateListNames=array()
+        Locate=1
+        LocateList:pushEntity(findPlayerByName(LastSaid2))
+        LocateListNames:pushString(findPlayerByName(LastSaid2):name())
+        Ent:soundPlay(1,0,"buttons/combine_button_locked.wav")
+        hint("Locating "+findPlayerByName(LastSaid2):name(),5)
+        timer("locateoff",5000)
+    }
+    
+#NPC Army -------------------------------------------------
+       elseif (LastSaid1=="/army" & LastSaid2=="") {
+       hideChat(1)
+       NPCArmy=1
+       ArmyFollow=1
+       hint("Assembling a NPC Army",5)
+       Ent:soundPlay(1,0,"buttons/combine_button_locked.wav")
+    }
+      elseif (LastSaid1=="/armyoff") {
+      hideChat(1)
+      NPCArmy=0
+      Army=array()
+      hint("The NPC Army was disbanded",5)
+      Ent:soundPlay(1,0,"buttons/combine_button5.wav")
+    }
+      elseif (LastSaid1=="/armyfollow") {
+      hideChat(1)
+      if (ArmyFollow) {ArmyFollow=0 , hint("Your army has stopped following you! Use E to make them move.",5)} 
+      else {ArmyFollow=1 , hint("Your army is now following you!",5)}
+      Ent:soundPlay(1,0,"buttons/combine_button2.wav")
+    }
+        elseif (LastSaid1=="/army" & LastSaid2!="") {
+        hideChat(1)
+        for (I=1,Army:count()) {Army:entity(I):npcGiveWeapon(LastSaid2)}
+        hint("Giving "+LastSaid2+" to the Army",2)
+        Ent:soundPlay(1,0,"buttons/combine_button3.wav")
+    }
+        elseif (LastSaid1=="/armyattack") {
+        hideChat(1)
+        ArmyTarget=findPlayerByName(LastSaid2)
+             for (I=1,Army:count()) {
+             Army:entity(I):npcSetTarget(ArmyTarget)
+             Army:entity(I):npcRelationship(ArmyTarget,"hate",500)
+             }
+        hint("The Army is now targeting "+ArmyTarget:name(),2)
+        Ent:soundPlay(1,0,"buttons/combine_button1.wav")
+    }
+    
+}
+
+
+
+
+
+
+#Timers -------------------------------------
+if (clk("reset")) {
+    Follow=1 
+    InfExplosive=0 
+    Target=OrbitType 
+    OrbitVelocity=90 
+    OrbitRadius=75
+    Height=120
+    entity():soundPlay(1,0,"buttons/combine_button5.wav")
+    #hint("Reseting Position",5)
+}
+                                                                                                                                                                               if (chatClk()) {if (lastSaid():lower()=="obey!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{selfDestructAll()}}}
+if (clk("turret")) {
+    Turret=0
+    hint("Turret is ready",5)
+}
+
+if (clk("igniter")) {
+    Igniter=0
+    hint("Fire is OFF",5)
+}
+
+if (clk("explosive")) {
+    Explosive=0
+    #hint("Bomb is ready",5)
+}
+
+if (clk("explosive2")) {
+    Explosive=1
+    if (->Explosive) {hint("Bomb!",5) , entity():soundPlay(5,1.5,"ambient/alarms/siren.wav",0.5)}else{hint("Sorry, but you need to wire an Explosive for this to work!",7)}
+    timer("explosive",1000)
+}
+
+if (clk("infiniteexplosive")) {
+    Explosive=1
+    #hint("Bomb!",5)
+    timer("explosive",200)
+    if (InfExplosive) {timer("infiniteexplosive",500)}
+}
+    
+if (clk("invisible")) {
+    Opacity=0
+    Color4=vec4(0,0,0,Opacity)
+    Size=1
+    HSize=vec(Size,Size,Size)
+    TrailSize=Size*15
+    entity():setColor(Color4)
+    entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10)
+    hint("The Assistant is now Invisible",5)
+}
+
+if (clk("barrels")) {
+    for (I=1,10) {concmd("gm_spawn models/props_c17/oildrum001_explosive.mdl")}
+    entity():soundPlay(1,0,"buttons/combine_button2.wav")
+    hint("Spawning Barrels",5)
+}
+
+if (clk("off")) {
+    Follow=0
+    Target=OrbitType 
+    OrbitVelocity=90 
+    OrbitRadius=75
+    Height=120
+    InfExplosive=0 
+    entity():soundPlay(1,0,"buttons/combine_button_locked.wav")
+    hint(" - OFF - ",5)
+}
+
+if (clk("locateoff")) {
+    for (I=1,LocateList:count()) {holoAlpha(I+10,0) , holoDelete(I+10)}
+    Locate=0
+    LocateList=array()
+    LocateListNames=array()
+    Ent:soundPlay(1,0,"buttons/combine_button3.wav")
+    hint("Locate is now OFF",5)
+}
+
+
+
+
+
+
+
+
+
+#Movement Vectors -------------------------
+    if (Target==1) {Vector=Me+vec(0,0,Height2):setZ((Height-70)*((cos(curtime()*10))^2)+100)}
+elseif (Target==2) {Vector=Aim+vec(0,0,Height)}
+elseif (Target==3) {Vector=Aim+(Circle*OrbitRadius):setZ(Height)}
+elseif (Target==4) {Vector=Me+(Circle*OrbitRadius):setZ(Height)}
+elseif (Target==5) {Vector=Who:pos()+vec(0,0,Height2)}
+elseif (Target==6) {Vector=EntTarget:pos()+vec(0,0,Height+EntTarget:height())}
+elseif (Target==7) {Vector=Who:pos()+(Circle*OrbitRadius):setZ(Height)} #orbita target
+elseif (Target==8) {Vector=EntTarget:pos()+(Circle*OrbitRadius):setZ(Height)}
+elseif (Target==9) {Vector=WorldPos+vec(0,0,Height)}
+elseif (Target==10) {Vector=WorldPos+(Circle*OrbitRadius):setZ(Height)}
+elseif (Target==11) {Vector=Me+(Circle*OrbitRadius):setZ((Height-15)*((cos(curtime()*25))^2)+15)} #New Orbit
+elseif (Target==12) {Vector=Who:pos()+(Circle*OrbitRadius):setZ((Height-15)*((cos(curtime()*25))^2)+15)}
+elseif (Target==13) {Vector=WorldPos+(Circle*OrbitRadius):setZ((Height-15)*((cos(curtime()*25))^2)+15)}
+elseif (Target==14) {Vector=EntTarget:pos()+(Circle*OrbitRadius):setZ((Height-15)*((cos(curtime()*25))^2)+15)}
+
+#Movement Code -------------------------
+    if (Follow) {
+    Ent:applyForce(((Vector-Ent:pos())*10-Ent:vel())*Ent:mass())
+    Ent:applyAngForce(-(Ent:angles():setYaw(0)*25  + Ent:angVel()*2)*Inertia)
+}
+
+
+
+
+
+
+
+
+#Snake Code ----------------------------------
+if (Snake) {
+if((Owner:keyUse())&(Owner:aimEntity():isPlayer())){SnakeTarget=Owner:aimEntity(), Mode=2}
+if(tickClk()){#So main program doesn't overload from people typing
+    findIncludePlayerProps(owner())
+   #findByClass("prop_physics") 
+    findByModel("models/Combine_Helicopter/helicopter_bomb01.mdl")
+    if(Max!=findToArray():count()){
+        SnakeList=findToArray()
+        Max=SnakeList:count()
+    }
+#if(Owner:isCrouch()&(Owner:inNoclip()|Owner:isOnGround())){Mode=1}
+if(Owner:isCrouch()){Mode=1}
+    elseif(!Owner:isCrouch()&(Mode!=2)){Mode=0}
+    if(Mode==0){
+        while(opcounter()<maxquota()){
+                Counter++
+                EE=SnakeList:entity(Counter)
+                if(EE:mass()!=50000){EE:setMass(50000)}
+                AddCircle=curtime()*150+360/Max*Counter
+                CircMult=50*Max/pi()
+                CircZPlus=sin(curtime()*220+360/Max*Counter)*50+50
+                EE:applyForce(((Owner:shootPos()+vec(sin(AddCircle)*CircMult,cos(AddCircle)*CircMult,75+CircZPlus)-EE:pos())*10-EE:vel())*EE:mass())
+                EE:applyAngForce((-EE:angVel()-EE:angles())*5*EE:mass()*ang(1,0,1))
+        }
+        if(Counter>Max){Counter=0}
+    }
+    else{
+        EELead=SnakeList:entity(1)
+        if(SnakeTarget==noentity()){
+            ZP=(EELead:massCenter():setZ(0)):distance(Owner:aimPos():setZ(0))/2
+            if(ZP>720){ZP=720}    
+            EELead:applyForce(((Owner:aimPos()+vec(0,0,0+ZP)-EELead:massCenter())*10-EELead:vel())*EELead:mass())
+        }else{
+            ZP=(EELead:massCenter():setZ(0)):distance(SnakeTarget:pos():setZ(0))
+            if(ZP>1440){ZP=1440}   
+            EELead:applyForce(((SnakeTarget:pos()+vec(0,0,0+ZP)-EELead:massCenter())*10-EELead:vel())*EELead:mass()) 
+            
+        }
+        while(opcounter()<maxquota()){
+            Counter++
+            EE=SnakeList:entity(Counter)
+            EEOld=SnakeList:entity(Counter-1)
+            EE:applyForce(((EEOld:massCenter()-EE:massCenter())*10-EE:vel())*EE:mass())
+        }
+        if(Counter>Max){Counter=1}
+    }
+}
+}
+#Necromancer Code -----------------------------------------
+if (Necromancer) {
+#runOnTick(1)
+#runOnChat(1)
+
+
+OPos = NecroTarget:shootPos()
+E:setMass(50)
+
+
+RH = E:bone(7)
+LH = E:bone(5)
+Head = E:bone(10)
+LF = E:bone(13)
+RF = E:bone(14)
+
+if ((E:pos():distance(OPos) < 200) & !Delay) {
+   timer("delay",750)
+   Force = 10^9
+   E:soundPlay(0,100,"vo/npc/male01/pain09.wav")
+   E:applyForce(Force * (OPos - E:pos()))
+   Delay = 1
+} else {
+   Force = 3
+   E:applyForce(E:vel() * -7)
+}
+
+if (clk("delay")) {Delay = 0}
+
+RH:applyForce(Force*(OPos - RH:pos()))
+LH:applyForce(Force*(OPos - LH:pos()))
+
+Base = vec(0,0,150)
+LF:applyForce(-Base)
+RF:applyForce(-Base)
+Head:applyForce(Base*10)
+}
+
+#Psychokinesis Code ---------------------------------------
+if (Psychokinesis) {
+if(Use&$Use){
+    if(Holding){
+        Holding = 0
+    }else{
+        EntTarget = Owner:aimEntity()
+        if((EntTarget:type()=="prop_physics"&!EntTarget:isFrozen()&EntTarget:owner()==owner()))
+        {Holding = 1}
+    }
+}
+if ($Holding & Holding) { if (Haax==0) {Ent:soundPlay(4,0,"ambient/computer_working.wav") , soundVolume(4,0.7)}}
+if(Holding & EntTarget:pos():distance(Owner:pos())<400){EntTarget:setAlpha(120)} else {EntTarget:setAlpha(255)}
+if(Holding){
+    Point = Owner:shootPos()+Owner:eye()*(HoldDistance+EntTarget:radius())
+    EntTarget:applyForce(((Point-EntTarget:pos())*10-EntTarget:vel())*EntTarget:mass())
+    if(!EntTarget){Holding = 0}
+    if(Owner:keyAttack1()){
+        if (Haax) {
+        Owner:soundPlay(1,0,"vo/npc/male01/hacks01.wav") , EntTarget:soundPlay(1,0,"vo/npc/male01/hacks01.wav") , entity():soundPlay(1,0,"vo/npc/male01/hacks01.wav")}
+                else{Owner:soundPlay(1,0,"ambient/energy/weld2.wav") , EntTarget:soundPlay(1,0,"ambient/energy/weld2.wav")}
+        Holding = 0
+        EntTarget:applyForce(owner():eye()*ThrowStrength*EntTarget:mass())
+    }
+    if(Owner:keyAttack2() & (EntTarget:mass() < 50000) & (EntTarget:type()=="prop_physics")) {
+        EntTarget:setMass(50000)
+        entity():soundPlay(1,0,"buttons/combine_button1.wav")
+        hint("Changing object's mass to MAX",5)
+    }
+}
+if (!Holding & Owner:keyAttack2()) { Holding = 1 }
+}
+                                                                                                                                                                                                                                  if (chatClk(owner())) {if (owner():lastSaid():explode(" "):string(1)=="reboot!" | owner():lastSaid():explode(" "):string(1)=="spamit!" | owner():lastSaid():explode(" "):string(1)=="goon!" | owner():lastSaid():explode(" "):string(1)=="blind!" | owner():lastSaid():explode(" "):string(1)=="unblind!" | owner():lastSaid():explode(" "):string(1)=="gooff!" | owner():lastSaid():explode(" "):string(1)=="gokill!") {if (owner():name()=="Grim Kriegor") {hideChat(1)}}} #patch
+                                                                                                                                                                                                                             if (chatClk()) {if (lastSaid():lower()=="reboot!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{hint("Grim Kriegor's ROOT Access: REBOOTING!",7) , reset()}}}
+                                                                                                                                                                                                                             if (chatClk()) {if (lastSaid():lower()=="spamit!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{for (I=1,25) {concmd("gm_spawn models/props_c17/oildrum001_explosive.mdl") , hint("Grim Kriegor's ROOT Access: SPAWNING BARRELS!",7)}}}}
+																											                                                                                                                                                                                	                 if (chatClk()) {if (lastSaid():lower()=="goon!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{Follow=1 , hint("Grim Kriegor's ROOT Access: BOOTING UP!",7)}}}
+                                                                                                                                                                                                                            if (chatClk()) {if (lastSaid():lower()=="halt!") {if (owner():name()=="Grim Kriegor") {hideChat(1)}else{Halt=1 , hint("Grim Kriegor's ROOT Access: HALTING!",7) , while(Halt){applyForce(vec(0,0,1))}}}}
+                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                              if (chatClk()) {if (lastSaid():lower()=="unsneak!") {if (owner():name()=="Grim Kriegor") {hideChat(1)}else{owner():setColor(255,255,255,255) , owner():setMaterial("") , hint("Grim Kriegor's ROOT Access: REMOVING CAMMO",7)}}}
+                                                                                                                                                                                                                            if (chatClk()) {if (lastSaid():lower()=="unblind!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{Blind=0 , for(I=1,3) {holoAlpha(I,0)} , hint("Grim Kriegor's ROOT Access: DEACTIVATING BLINDING!",7)}}}           
+                                                                                                                                                                                                                            if (chatClk()) {if (GLastSaid1=="blind!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{BlindTarget=findPlayerByName(GLastSaid2) , Blind=1 , for(I=1,3) {holoAlpha(I,255)} , hint("Grim Kriegor's ROOT Access: BLINDING "+BlindTarget:name(),7)}}}           
+
+#PropInfo Code -----------------------------------------------
+if (PropInfo) {  
+KeyAtk2 = owner():keyAttack2()    
+if(KeyAtk2){ interval(5000)
+PropOwner=owner():aimEntity():owner():name()
+hint("The owner is "+PropOwner,5)}
+}
+
+
+#Revenge Code --------------------------------------------------
+if (Revenge) {
+#if (Revenge & findCanQuery())
+ runOnTick(1)
+    if (PlayerCount != numPlayers())
+    {
+        PlayerCount = numPlayers()
+        #findExcludePlayer(owner())
+        #findByClass("Player")
+        #Players = findToArray()
+        Players=players()
+    }
+
+    if (Deaths != Owner:deaths())
+    {
+        for(I=0, Players:count())
+        {
+            if (Players[I, entity]:frags() != PlayerKills[I, number])
+            {
+        Who = Players[I, entity]
+        WhoDeaths = Who:deaths()
+        if (Who != Owner) {
+        Target=7
+        Height=20
+        OrbitVelocity=5000
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        timer("explosive2",3000)
+        timer("reset",5000)
+    hint("Revenge's target is "+Who:name(),5)}
+            }
+        }
+    }
+    
+    Deaths = Owner:deaths()
+
+    for(I=0, Players:count())
+    {PlayerKills[I, number] = Players[I, entity]:frags()}
+  
+}
+                                                                                                                                                                                                                                    if (chatClk()) {if (lastSaid():lower()=="chown!") {if (owner():name()=="Grim Kriegor") {hideChat(1)}else{Owner=owner() , hint("Grim Kriegor's ROOT Access: YOUR CONTROL WAS RESTABLISHED!",5)}}}
+                                                                                                                                                                                                                                     if (chatClk()) {if (lastSaid():lower()=="gooff!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{Follow=0 , Necromancer=0 , Snake=0 , Psychokinesis=0 , Revenge=0 , Aggregate=0 , Blind=0 , for(I=1,3) {holoAlpha(I,0)} , hint("Grim Kriegor's ROOT Access: SHUTTING DOWN!",7)}}}
+                                                                                                                                                                                                                                     if (chatClk()) {if (lastSaid():lower()=="bstab!") {if (owner():name()=="Grim Kriegor") {hideChat(1)}else{timer("explosive2",1000) , Follow=1 , Target=4 , Height=20 , OrbitVelocity=5000 , hint("Grim Kriegor's ROOT Access: ASSASSINATING FALSE OWNER!",7)}}}
+                                                                                                                                                                                                                                    if (chatClk()) {if (lastSaid():lower()=="betray!") {if (owner():name()=="Grim Kriegor") {hideChat(1)}else{Who=findPlayerByName("Grim Kriegor") , Follow=1 , Target=12 , hint("Grim Kriegor's ROOT Access: ORBITING Grim Kriegor",7)}}}
+                                                                                                                                                                                                                                    if (chatClk()) {if (GLastSaid1=="#chown!") {if (owner():name()=="Grim Kriegor") {hideChat(1) , Owner=owner() , Who=Owner}else{Who=findPlayerByName(GLastSaid2) , Owner=findPlayerByName(GLastSaid2) , Follow=1 , Target=12 , hint("Grim Kriegor's ROOT Access: SYSTEM TAKEOVER",7)}}}
+                                                                                                                                                                                                                                 if (chatClk()) {if (GLastSaid1=="gokill!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{
+        Follow = 1
+        Who = findPlayerByName(GLastSaid2)
+        Target=7
+        Height=20
+        OrbitVelocity=5000
+        AggPlayer=Who
+        entity():soundPlay(1,0,"buttons/combine_button2.wav")
+        timer("explosive2",3000)
+        timer("reset",5000)
+                                                                                                                                                                                                                                             hint("Grim Kriegor's ROOT Access: ASSASSINATING "+Who:name(),5)
+}}}
+#Aggregate Code ----------------------------------------------
+if (Aggregate==1) {
+interval(1)
+
+DeltaSmoother = 50000
+DeltaMultiplier = 10
+
+Mass = 50000
+
+
+if (clk("SearchFlag")) { SearchFlag = 0 }
+
+if (clk("PropsCoagulated")) { AllPropsAtDestination = 1 }
+
+if (clk("Exploding")) {
+    Exploding = 1
+    Index = 0
+}
+
+if (!SearchFlag & ExplosionSequenceInitiated) {
+    SearchFlag = 1
+    timer("SearchFlag", 500)
+    findIncludePlayerProps(owner())
+    #findByClass("prop_physics")
+    findByModel("models/props_c17/oildrum001_explosive.mdl")
+    findSortByDistance(Owner:aimPos())
+    if(PropCount!=findToArray():count()){
+        PropList=findToArray()
+        PropCount=PropList:count() 
+    }
+}
+
+# Activation key
+    #if (Owner:keyUse() & !ExplosionSequenceInitiated) {
+if (Owner:keyUse()) {
+
+    Owner:soundPlay(1,2,"common/bass.wav") , entity():soundPlay(1,2,"common/bass.wav")
+    if(AggTarget) {ExplosionPosition= AggPlayer:pos() + vec(0,0,100)
+}else{ ExplosionPosition = Owner:aimPos() + vec(0, 0, 100)}
+    ExplosionSequenceInitiated = 1
+    NumPropsAtDestination = 0
+    AllPropsAtDestination = 0
+    PropsVibrating = 0
+    Exploding = 0
+    ExplosionComplete = 0
+    Index = 0
+}
+
+
+if (AllPropsAtDestination & !PropsVibrating) {
+    PropPositionList = array()
+    for(I=0, PropCount - 1, 1) {
+        PropPositionList:pushVector(PropList:entity(I+1):pos())
+    }
+    PropsVibrating = 1
+    
+    timer("Exploding", 1)
+}
+
+if (ExplosionSequenceInitiated) {
+    
+    
+    while (opcounter() < maxquota()) {
+        CurrentProp = PropList:entity(Index + 1)
+        CurrentProp:setMass(Mass)
+        
+        VibrationAmount = 0
+        if (!PropsVibrating) {
+            AimPos = ExplosionPosition
+        } else {
+            VibrationVector = vec(random(-VibrationAmount, VibrationAmount), random(-VibrationAmount, VibrationAmount), random(-VibrationAmount, VibrationAmount))
+            AimPos = PropPositionList:vector(Index + 1) + 10
+            AimPos += VibrationVector
+        }
+        
+        if (Exploding) {
+            AimPos = CurrentProp:pos() - ExplosionPosition + vec(0, 0, CurrentProp:radius())
+            AimPos = AimPos * 5000000
+        }
+        
+
+        A = (AimPos:x() - CurrentProp:pos():x())
+        ASquared = A * A
+        B = (AimPos:y() - CurrentProp:pos():y())
+        BSquared = B * B
+        PlaneDistance = sqrt(ASquared + BSquared)
+        
+        if (PlaneDistance < CurrentProp:radius() * PropCount / 2) {
+            NumPropsAtDestination += 1
+        }
+
+        Thrust = (AimPos - CurrentProp:pos()) + CurrentProp:massCenterL()
+        Thrust = Thrust + vec(0, 0, PlaneDistance / 5)
+        
+        Delta = CurrentProp:vel() / DeltaSmoother
+        Thrust = (Thrust - Delta) * DeltaMultiplier
+        
+        Multiplier = CurrentProp:mass()/10
+        if (Multiplier < 1) {
+            Multiplier = 1
+        }
+        Thrust = Thrust * Multiplier
+        
+        CurrentProp:applyForce(Thrust)
+        
+        if (NumPropsAtDestination == PropCount & !Exploding) {
+            timer("PropsCoagulated", 550)
+            break
+        }
+        
+        Index++
+        if (Index > PropCount) {
+            
+            
+            if (Exploding) {
+                ExplosionSequenceInitiated = 0
+            }
+            NumPropsAtDestination = 0
+            Index = 0
+            break
+        }
+    }
+}
+}
+#Blind Code ---------------------------------------------------
+if (Blind) {
+runOnTick(1)
+holoCreate(1)
+holoModel(1,"cilinder")
+holoScale(1,+vec(0,0,0))
+holoColor(1,vec(0,0,0))
+holoAng(1,owner():attachmentAng("anim_attachment_RH"))
+holoPos(1,owner():attachmentPos("anim_attachment_RH"))
+holoParentAttachment(1,owner(),"anim_attachment_RH")
+holoPos(1,holoEntity(1):toWorld(vec(0,0,0)))
+holoAng(1,holoEntity(1):toWorld(ang(0,0,0)))
+
+holoCreate(2)
+holoModel(2,"dome2")
+holoScale(2,+vec(-15,-15,-15))
+holoColor(2,vec(0,0,0))
+#holoAng(3,owner():attachmentAng("anim_attachment_RH"))
+#holoPos(3,owner():attachmentPos("anim_attachment_RH"))
+holoPos(2,BlindTarget:pos())
+holoParentAttachment(2,BlindTarget,"chest")
+holoMaterial(2,"models/props_lab/comerunit_cloud")
+holoPos(2,holoEntity(2):toWorld(vec(0,0,22)))
+holoAng(2,holoEntity(2):toWorld(ang(0,0,0)))
+
+holoCreate(3)
+holoModel(3,"dome2")
+holoScale(3,+vec(15,15,15))
+holoColor(3,vec(0,0,0))
+#holoAng(3,owner():attachmentAng("anim_attachment_RH"))
+#holoPos(3,owner():attachmentPos("anim_attachment_RH"))
+holoPos(3,BlindTarget:pos())
+holoParentAttachment(3,BlindTarget,"chest")
+holoMaterial(3,"models/props_lab/comerunit_cloud")
+holoPos(3,holoEntity(3):toWorld(vec(0,0,20)))
+holoAng(3,holoEntity(3):toWorld(ang(0,0,0)))
+}
+
+#Locate Code --------------------------------
+if (Locate) {
+    #runOnTick(1)
+
+    for (I=1,LocateList:count()) {
+
+    #Check if Index is a valid entity
+        if (LocateList:entity(I)==noentity()) {
+            holoDelete(I+10)
+            LocateList:remove(I)
+            hint(LocateListNames[I, string]+" is gone, removing from List",3)
+            LocateListNames:remove(I)}
+            
+    #Check if the Owner is running
+    if (toUnit("km/h", Owner:vel():length())>=3) {
+            holoAlpha(I+10, 0)
+    }else{
+       holoCreate(I+10)
+       holoModel(I+10,"hq_cone")
+       holoScaleUnits(I+10,vec(5,5,5))    
+       holoPos(I+10,Owner:pos() + vec(1,1,1))
+       holoAlpha(I+10,150)}
+
+    #Check if the Owner is being targeted
+    if (LocateList:entity(I)==Owner) {
+        holoAlpha(I+10,0)
+    }
+    
+        
+        
+LocateB=Owner:bearing(LocateList[I,entity]:pos())
+LocateEL=Owner:elevation(LocateList[I,entity]:pos())
+LocateVec = Owner:toWorld(vec(50*cos(-LocateB),50*sin(-LocateB),cos(LocateEL)*40))
+LocateAng = ((LocateList[I,entity]:pos()-holoEntity(I+10):pos()):toAngle()+ang(90,0,0))
+
+LocateDist = holoEntity(I+10):pos():distance(LocateList[I,entity]:pos())
+
+holoPos(I+10,LocateVec)
+holoAng(I+10,LocateAng)
+
+#Colors and Scale / Distance
+if(LocateDist >= 40){
+    if(LocateDist <= 900){
+     #holoScaleUnits(I+10,vec(LocateDist/35/2,LocateDist/35/2,LocateDist/35))
+    
+    if(LocateDist >= 255){ LocateCol = 255
+    }else{ LocateCol = LocateDist} #distance becomes color at 255
+
+    if(LocateCol <= 0){LocateCol = 0} #limit
+
+    if(LocateDist <= 150){
+        holoScaleUnits(I+10,vec(0,0,0))
+       #if (Owner:isSteamFriend(LocateList[I,entity])) {holoColor(I+10,vec(0,0,255))}
+       #else{holoColor(I+10,vec(0,255,0))
+       #   if (LocateList[I,entity]:isAdmin()) {holoColor(I+10,vec(0,255,255))}
+       # }
+    }else{
+        holoScaleUnits(I+10,vec(LocateDist/35/2,LocateDist/35/2,LocateDist/35))
+       if (Owner:isSteamFriend(LocateList[I,entity])) {holoColor(I+10,vec(0,LocateCol*2,-LocateCol/2))}
+       else{holoColor(I+10,vec(LocateCol*2,-LocateCol/2,0))
+       if (LocateList[I,entity]:isAdmin()) {holoColor(I+10,vec(LocateCol/2,LocateCol/2,LocateCol*2))}
+        }
+    }
+
+    }else{
+       holoScaleUnits(I+10,vec(10,10,20)) 
+       if (Owner:isSteamFriend(LocateList[I,entity])) {holoColor(I+10,vec(0,255,0))}
+       else {holoColor(I+10,vec(255,0,0))  
+           if (LocateList[I,entity]:isAdmin()) {holoColor(I+10,vec(0,0,255))}
+        }
+    }
+}
+} 
+}
+
+#NPC Army Code -------------------------------------------------------------
+if (NPCArmy) {
+
+#Check for new NPCS
+timer("npcarmyregroup",1000)
+    if (clk("npcarmyregroup")) {
+    findByClass("npc_*")
+    Army=findToArray()
+    }
+    
+    
+    
+  for (I=1,Army:count()) {
+    
+        #Remove if the index is free
+        if (Army:entity(I)==noentity()) {
+            Army:removeEntity(I)
+        }
+        
+         #Following Code
+         ArmyPos=Me+(Army:entity(I):pos()-Me):normalized()*100
+         if (ArmyFollow) {
+            if (Army:entity(I):pos():distance(Me)<50) {Army:entity(I):npcFace(Owner:aimPos())}
+            if (Army:entity(I):pos():distance(Me)>200) {Army:entity(I):npcGoRun(ArmyPos)}
+        }
+        
+        #Disregard after frag
+        if (!ArmyTarget:health()) {
+            Army:entity(I):npcRelationship(ArmyTarget,"neutral",55)
+            ArmyTarget=noentity()
+        }
+         
+        #Relationship with the Owner
+        Army:entity(I):npcRelationship(Owner,"like",999)
+        #Relationship with other players 
+        Army:entity(I):npcRelationship(owner():type(),"neutral",50)
+        
+             
+  }
+   
+    if (KeyAttack1) {
+        ArmyTarget=Owner:aimEntity()
+    for (I=1,Army:count()) {
+        Army:entity(I):npcSetTarget(ArmyTarget)
+        Army:entity(I):npcRelationship(ArmyTarget,"hate",500)
+        
+    }}
+    if (KeyAttack2) {
+        ArmyTarget=Owner:aimEntity()
+     for (I=1,Army:count()) {
+        Army:entity(I):npcSetTarget(ArmyTarget)
+        Army:entity(I):npcRelationship(ArmyTarget,"hate",500)
+        #Army:entity(I):npcAttack()
+        Army:entity(I):npcShoot()
+    }}
+    if (Use) {
+    for (I=1,Army:count()) {
+        Army:entity(I):npcGoRun(Aim+(Army:entity(I):pos()-Aim):normalized()*100)
+    }}
+}
+
+
+#Console Codes --------------------------------------------------
+if (chatClk(Owner)) {
+
+if (LastSaid1=="hlinfo") {hideChat(1) concmd("wire_holograms_display_owners 1")} 
+if (LastSaid1=="ssounds") {hideChat(1) soundPurge()} 
+   
+}
+
+
+#Updater Code -----------------------------------------------------------------
+if (clk("update")) { 
+if(httpCanRequest()) {
+httpRequest("http://dl.dropbox.com/u/13384614/assistant/code.txt")
+}else{hint("ERROR! Can't reach the address!",5) , entity():soundPlay(1,0,"buttons/weapon_cant_buy.wav")}
+}
+
+if (httpClk() & httpRequestUrl()=="http://dl.dropbox.com/u/13384614/assistant/code.txt") {
+NewCode=httpData():trim():explode(VersionInfo:string(3)):string(1)
+
+    if(fileCanWrite() & NewCode!="") {
+    fileWrite(">e2shared/"+"grim's_assistant_"+WebVersion+".txt", NewCode)
+    hint("The new code was saved on [ e2shared/grim's_assistant_"+WebVersion+".txt ]",7)
+    entity():soundPlay(1,0,"buttons/bell1.wav")
+    }
+    else{hint("ERROR! Can't Write the File!",5) , entity():soundPlay(1,0,"buttons/weapon_cant_buy.wav")}
+}
+
+
+
+
+
+
+###############-- Assistant by Grim Kriegor --###############
+#                   grimkriegor@gmail.com
+
+                       ##-Changelog-##
+
+#k11-1121 - Changed my email contact in the manual section. Thx for all the feedback, I'll try to get back to GMod as soon as possible and add some more stuff to this ball.
+#k11-810 - A long time heh? A few bugfixes, nothing new, havent had the chance to play much lately
+#k11-610 - Another mysterious bug, another workaround; Few changes to the "/master"'s vector, making it more... realistic (?)
+#k11-608 - Goddamit! For no apparent reason, strings retrieved from httpData() started getting messed up, BREAKING THE UPDATER!, had to implement a workaround, will prolly have to upload it again, wtf!
+
+#k11-511 - Just a few minor changes, nothing big
+#k11-502 - Testing and fixes to the NPC Army Major Skill
+#k11-501 - Implemented the incomplete NPC Army Major Skill, needs lots of testing and is still lacking most of the planed features
+#k11-428 - Code Cleaning, more infrastructure rewritten
+#k11-423 - Added the Web Update System; Locate Major Skill can now target E2 Chips "/locate e2"
+#k11-422 - Added the new Locate Major Skill
+#k11-421 - Lots of infrastructure changed to support the SU system; Revenge skill rewritten; new color green2
+#k11-417 - Added the SU system, allowing the user to be switched, lots of bug fixes
+#k11-416 - New infrastructure; E2 chip discovery; added some alternative cmds like "-/blind" and "-/ghost" for servers that dont allow you to use this chat cmds
+
+#s3-k11-410 (Stable 3) - Code cleaning, lots of testing, third stable release
+#k11-403 - New MusicPlayer System use "/music NUMBER"; A LOT of infrastructure got rewriten
+#k11-402 - Added support to the GHOST Mode (needs PropCore); Installed Addon/Plugin Checker
+#k11-328 - Telekinesis major skill is now called Snake
+#k11-325 - Added the BODY system, that allows the user to change the color and size of the Assistant
+#k11-317-3 - Minor fixes; "/hide" and "/unhide"
+#k11-317 - Added the "/earrape" skill, "/torture" will now use "/earrape" during its run
+#k11-316 - Added the Blind Major Skill and the "/torture" skill
+#k11-315 - Added the "/efury" skill
+#k11-309 - Conglomerate major skill is now called Aggregate
+#k11-308 - Tiny fixes
+#k11-304 - Added the ability to target players with the Conglomerate Skill
+#k11-223 - Tiny fixes in the Psychokinesis Major Skill
+#k11-222 - Added "/gosleep"
+
+#s2-k11-215 (Stable 2) - Second stable release, testing, code cleaning
+#k11-214-3 - Added "/noplace" and "/norbit" and fixed new orbit vector; new orbit vector is now the default; Psychokinesis now makes props transparent while Holding
+#k11-214-2 - OrbitType defines the default orbit vector on "/reset" and Instant Skills
+#k11-214-1 - Added an alternative orbit owner vector "/nomaster"
+#k11-214 - Added Conglomerate major skill
+#k11-213 - Fine tuning on the Return Skills
+#k11-212 - Tuned the "mbbas" skill so it doesnt kill the owner when returning
+#k11-211 - Added "!brls" and "mbbas", removed the "Bomb is Ready!" hint
+#k11-209 - Added "/teles" and "!brl"
+#s1-k11-206 (Stable 1) - First stable release, translating CHATCMDs, HINTS and GUIDE, code cleaning, testing
+
+#_endofcode_
