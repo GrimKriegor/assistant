@@ -1,0 +1,149 @@
+@name grim's equipment - Shiroken
+@persist OwnVisible
+runOnChat(1)
+
+#PreSpawn Settings
+Shiroken = 1
+ShiroPassive = 1
+
+if (first() | duped()) {
+    
+    if (owner():steamID() != "STEAM_0:0:10211667") {
+    #hint("Sorry but you cant have Grim's l33t works",7)
+    #print("Dont be a noob")
+    #selfDestructAll()
+    }
+}
+
+
+#Shiroken --------------------------------------------------
+if (Shiroken==1) {
+interval(250)
+
+if (chatClk(owner())) {
+    if (owner():lastSaid()=="!ownvisible") {hideChat(1) OwnVisible=1}
+    elseif (owner():lastSaid()=="!owninvisible") {hideChat(1) OwnVisible=0}
+}
+
+if (!OwnVisible) {
+for (I=5,8) {holoVisible(I,owner(),0)}
+}
+if (OwnVisible) {
+for (I=5,8) {holoVisible(I,owner(),1)}
+}
+
+Wpn = owner():weapon():type() == "weapon_crowbar"
+if (changed(Wpn)) {
+    if (Wpn) {
+        owner():weapon():setMaterial("models/effects/vol_light001")
+        for(I=2,5) {holoAlpha(I,255)}
+        for(I=6,8) {holoAlpha(I,0)}
+    } else {
+        for(I=2,5) {holoAlpha(I,0)}
+        for(I=6,8) {holoAlpha(I,255)}
+        #if (ShiroPassive) {for(I=6,8) {holoAlpha(I,255)}} else {for(I=6,8) {holoAlpha(I,0)}}
+    }
+}
+
+if (first() | duped()) {
+    OwnVisible=1
+
+
+
+#Debug
+holoCreate(1)
+holoModel(1,"cilinder")
+holoScale(1,+vec(0,0,0))
+holoColor(1,vec(0,0,0))
+holoAng(1,owner():attachmentAng("anim_attachment_RH"))
+holoPos(1,owner():attachmentPos("anim_attachment_RH"))
+holoParentAttachment(1,owner(),"anim_attachment_RH")
+holoPos(1,holoEntity(1):toWorld(vec(0,0,0)))
+holoAng(1,holoEntity(1):toWorld(ang(0,0,0)))
+
+#Blade
+holoCreate(2)
+holoModel(2,"cylinder")
+holoScale(2,+vec(0.1,0.05,4.5))
+holoColor(2,vec(255,255,255))
+holoAng(2,owner():attachmentAng("anim_attachment_RH"))
+holoPos(2,owner():attachmentPos("anim_attachment_RH"))
+holoParentAttachment(2,owner(),"anim_attachment_RH")
+#holoMaterial(1,"phoenix_storms/chrome")
+holoPos(2,holoEntity(2):toWorld(vec(0,0,26)))
+holoAng(2,holoEntity(2):toWorld(ang(0,0,0)))
+
+#Bar between Blade and Handle
+holoCreate(3)
+holoModel(3,"torus")
+holoScale(3,+vec(0.25,0.25,0.35))
+holoColor(3,vec(40,104,0))
+holoAng(3,owner():attachmentAng("anim_attachment_RH"))
+holoPos(3,owner():attachmentPos("anim_attachment_RH"))
+holoParentAttachment(3,owner(),"anim_attachment_RH")
+#holoMaterial(2,"models/XQM/BoxFull_diffuse")
+holoPos(3,holoEntity(3):toWorld(vec(0,0,4)))
+holoAng(3,holoEntity(3):toWorld(ang(0,0,0)))
+
+#Handle
+holoCreate(4)
+holoModel(4,"hqcylinder2")
+holoScale(4,+vec(0.15,0.15,1.4))
+holoColor(4,vec(20,20,20))
+holoAng(4,owner():attachmentAng("anim_attachment_RH"))
+holoPos(4,owner():attachmentPos("anim_attachment_RH"))
+holoParentAttachment(4,owner(),"anim_attachment_RH")
+#holoMaterial(3,"models/XQM/BoxFull_diffuse")
+holoPos(4,holoEntity(4):toWorld(vec(0,0,-3.9)))
+holoAng(4,holoEntity(4):toWorld(ang(0,0,0)))
+
+#Back Saya
+holoCreate(5)
+holoModel(5,"cylinder")
+holoScale(5,+vec(0.15,0.20,3.5))
+holoColor(5,vec(10,10,10))
+holoAng(5,owner():attachmentAng("chest"))
+holoPos(5,owner():attachmentPos("chest"))
+holoParentAttachment(5,owner(),"chest")
+#holoMaterial(1,"phoenix_storms/chrome")
+holoPos(5,holoEntity(5):toWorld(vec(-7,0,-9)))
+holoAng(5,holoEntity(5):toWorld(ang(0,-25,30)))
+
+if (ShiroPassive) {
+#Bar between Blade and HandleBACK
+holoCreate(6)
+holoModel(6,"torus")
+holoScale(6,+vec(0.25,0.25,0.35))
+holoColor(6,vec(40,104,0))
+holoAng(6,owner():attachmentAng("chest"))
+holoPos(6,owner():attachmentPos("chest"))
+holoParentAttachment(6,owner(),"chest")
+#holoMaterial(2,"models/XQM/BoxFull_diffuse")
+holoPos(6,holoEntity(6):toWorld(vec(-11.1,-9.4,9)))
+holoAng(6,holoEntity(6):toWorld(ang(0,-25,30)))
+
+#HandleBACK
+holoCreate(7)
+holoModel(7,"hqcylinder2")
+holoScale(7,+vec(0.15,0.15,1.4))
+holoColor(7,vec(45,45,45))
+holoAng(7,owner():attachmentAng("chest"))
+holoPos(7,owner():attachmentPos("chest"))
+holoParentAttachment(7,owner(),"chest")
+#holoMaterial(3,"models/XQM/BoxFull_diffuse")
+holoPos(7,holoEntity(7):toWorld(vec(-13,-13.5,16.5)))
+holoAng(7,holoEntity(7):toWorld(ang(0,-25,30)))
+
+#Back Saya BACK
+holoCreate(8)
+holoModel(8,"cylinder")
+holoScale(8,+vec(0.15,0.20,3.5))
+holoColor(8,vec(10,10,10))
+holoAng(8,owner():attachmentAng("chest"))
+holoPos(8,owner():attachmentPos("chest"))
+holoParentAttachment(8,owner(),"chest")
+#holoMaterial(1,"phoenix_storms/chrome")
+holoPos(8,holoEntity(8):toWorld(vec(-7,0,-9)))
+holoAng(8,holoEntity(8):toWorld(ang(0,-25,30)))
+} }
+}

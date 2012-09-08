@@ -1,0 +1,72 @@
+@name grim's assistant - ADDON ZaWarudo 3
+@inputs 
+@outputs 
+@persist ZaWarudo ZwTime ZwProps:array ZwProp:entity ZwHeight:array
+@persist KeyAttack2 KeyAttack1 Use
+@trigger 
+
+runOnTick(500)
+
+Ent=entity()
+KeyAttack2=owner():keyAttack2()
+Use=owner():keyUse()
+
+if (first() | duped()) {
+    hint("       Za Warudo       ",10)
+    print(_HUD_PRINTCENTER,"Za Warudo")
+    print("Method 3")
+    print("by Grim Kriegor")
+}
+    
+ZaWarudo=1
+Aggregate=1
+
+
+
+#ZaWarudo Mode -------------
+if(ZaWarudo & Aggregate) {
+runOnTick(2000)
+    
+if (KeyAttack2) {ZwTime=1}
+if (Use) {ZwTime=0}
+if (!ZwTime & $ZwTime) {hint("Soshite Toki ga Ugoki Desu!",5) , owner():soundPlay(1,0,"misc/hologram_start.wav")}
+if (ZwTime & $ZwTime) {hint("ZA WARUDO! Toki wo Tomare!",5) , owner():soundPlay(1,0,"misc/hologram_stop.wav")}
+
+if (owner():health()==0) {ZwTime=0}
+if (ZwTime) {
+    
+        findIncludePlayerProps(owner())
+        findByModel("models/props_c17/oildrum001_explosive.mdl")
+        ZwProps=findToArray() 
+        
+    
+        if (owner():keyAttack1()) { 
+        timer("zwspawn",400)
+        }
+        
+        
+        if(clk("zwspawn")) {
+        concmd("gm_spawn models/props_c17/oildrum001_explosive.mdl")
+        owner():soundPlay(1,0,"misc/freeze_cam.wav")
+        ZwHeight:insertNumber(ZwProps:count()+1, randint(owner():pos():z(), randint(owner():pos():z()+500)))  
+        }
+        
+
+
+      for(Index=1, ZwProps:count()) {
+      ZwProp=ZwProps[Index,entity]
+      ZwProp:setColor(135,135,135)
+      ZwPos = ZwProp:pos()
+      ZwProp:applyForce((((ZwPos:setZ(ZwHeight[Index,number]+100))+vec(0,0,1)-ZwPos)*10-ZwProp:vel())*ZwProp:mass())
+      ZwProp:applyAngForce(ang())
+      }
+
+}
+
+if (!ZwTime) {
+for(Index=1, ZwProps:count()) {
+ZwProp=ZwProps[Index,entity]
+ZwProp:setColor(255,255,255)}}
+
+}
+
