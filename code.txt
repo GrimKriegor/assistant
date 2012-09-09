@@ -1,4 +1,4 @@
-@name grim's assistant k11-1121
+@name grim's assistant k12-909
 @outputs Turret Grab Igniter Explosive Light
 @persist Owner:entity Follow Light Vector:vector Su [Version WebVersion MOTD]:string Update NewCode:string VersionInfo:array
 @persist Ent:entity EntTarget:entity InfExplosive DevLock
@@ -20,7 +20,7 @@
 ###############-- Assistant by Grim Kriegor --###############
 #                   grimkriegor@gmail.com
 
-Version = "k11-1121"
+Version = "k12-909"
 
 #Your assistant will inform you everytime a new version is avaliable!
 
@@ -298,7 +298,7 @@ Version = "k11-1121"
     
     #Version Check (SEND REQUEST)
     if(httpCanRequest()) {
-    httpRequest("http://dl.dropbox.com/u/13384614/assistant/version.txt")}
+    httpRequest("https://raw.github.com/GrimKriegor/assistant/master/version.txt")}
     
     entity():soundPlay(1,0,"buttons/blip2.wav")    
                                                                                                                                                         
@@ -397,7 +397,7 @@ KeyAttack2 = owner():keyAttack2()
 
 
 #Version Check
-	if (httpClk() & httpRequestUrl()=="http://dl.dropbox.com/u/13384614/assistant/version.txt") {
+	if (httpClk() & httpRequestUrl()=="https://raw.github.com/GrimKriegor/assistant/master/version.txt") {
     VersionInfo=httpData():trim():explode(";")
 	   WebVersion=VersionInfo:string(1)
     MOTD=VersionInfo:string(2)
@@ -2214,11 +2214,11 @@ if (LastSaid1=="ssounds") {hideChat(1) soundPurge()}
 #Updater Code -----------------------------------------------------------------
 if (clk("update")) { 
 if(httpCanRequest()) {
-httpRequest("http://dl.dropbox.com/u/13384614/assistant/code.txt")
+httpRequest("https://raw.github.com/GrimKriegor/assistant/master/code.txt")
 }else{hint("ERROR! Can't reach the address!",5) , entity():soundPlay(1,0,"buttons/weapon_cant_buy.wav")}
 }
 
-if (httpClk() & httpRequestUrl()=="http://dl.dropbox.com/u/13384614/assistant/code.txt") {
+if (httpClk() & httpRequestUrl()=="https://raw.github.com/GrimKriegor/assistant/master/code.txt") {
 NewCode=httpData():trim():explode(VersionInfo:string(3)):string(1)
 
     if(fileCanWrite() & NewCode!="") {
@@ -2238,6 +2238,8 @@ NewCode=httpData():trim():explode(VersionInfo:string(3)):string(1)
 #                   grimkriegor@gmail.com
 
                        ##-Changelog-##
+
+#k12-909 - Changed the updater links to point to the raw GitHub files
 
 #k11-1121 - Changed my email contact in the manual section. Thx for all the feedback, I'll try to get back to GMod as soon as possible and add some more stuff to this ball.
 #k11-810 - A long time heh? A few bugfixes, nothing new, havent had the chance to play much lately
