@@ -1,4 +1,4 @@
-@name grim's assistant k12-909
+@name grim's assistant k12-910
 @outputs Turret Grab Igniter Explosive Light
 @persist Owner:entity Follow Light Vector:vector Su [Version WebVersion MOTD]:string Update NewCode:string VersionInfo:array
 @persist Ent:entity EntTarget:entity InfExplosive DevLock
@@ -14,9 +14,8 @@
 @persist Blind BlindTarget:entity EarRape MusicList:array
 @persist Locate Locating LocateList:array LocateListNames:array
 @persist NPCArmy Army:array ArmyTarget:entity ArmyPos:vector ArmyFollow
-@model models/hunter/misc/sphere025x025.mdl
-
-
+# @model models/hunter/misc/sphere025x025.mdl
+@model models/dav0r/hoverball.mdl
 ###############-- Assistant by Grim Kriegor --###############
 #                   grimkriegor@gmail.com
 
@@ -360,7 +359,7 @@ Version = "k12-909"
     
     
 ### Blacklisted Abusive Users ###
-    BlackListed=array("wpww" , "STEAM_fag1")
+    BlackListed=array("wpww" , "Random Name")
     
         for(B=1, BlackListed:count()) {
         if (owner():name():lower() == BlackListed[B, string] | owner():steamID() == BlackListed[B, string]) {
@@ -1019,8 +1018,7 @@ elseif (LastSaid1=="!!sorry") { hideChat(1) entity():soundPlay(3,0,"vo/npc/male0
 
 #Skills code ------------------------------------
 if(EarRape) {
-entity():soundPlay(9,0,"synth/sine_880.wav")
-entity():soundPlay(10,0,"synth/pink_noise.wav")  
+entity():soundPlay(9,0,"synth/sine_880.wav") 
 entity():soundPlay(11,0,"synth/saw_inverted_1760.wav")  
 }
 
