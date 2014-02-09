@@ -296,7 +296,7 @@ I had built into the chip.
     
     #Version Check (SEND REQUEST)
     if(httpCanRequest()) {
-    httpRequest("https://raw.github.com/GrimKriegor/assistant/master/version.txt")}
+    httpRequest("https://raw.github.com/GrimKriegor/assistant/master/VERSION")}
     
     entity():soundPlay(1,0,"buttons/blip2.wav")    
                                                                                                                                                         
@@ -395,7 +395,7 @@ KeyAttack2 = owner():keyAttack2()
 
 
 #Version Check
-	if (httpClk() & httpRequestUrl()=="https://raw.github.com/GrimKriegor/assistant/master/version.txt") {
+	if (httpClk() & httpRequestUrl()=="https://raw.github.com/GrimKriegor/assistant/master/VERSION") {
     VersionInfo=httpData():trim():explode(";")
 	   WebVersion=VersionInfo:string(1)
     MOTD=VersionInfo:string(2)
