@@ -1,4 +1,4 @@
-@name grim's assistant k12-909
+@name grim's assistant v14-209
 @outputs Turret Grab Igniter Explosive Light
 @persist Owner:entity Follow Light Vector:vector Su [Version WebVersion MOTD]:string Update NewCode:string VersionInfo:array
 @persist Ent:entity EntTarget:entity InfExplosive DevLock
@@ -20,7 +20,7 @@
 ###############-- Assistant by Grim Kriegor --###############
 #                   grimkriegor@gmail.com
 
-Version = "k12-909"
+Version = "v14-209"
 
 #Your assistant will inform you everytime a new version is avaliable!
 
@@ -28,24 +28,22 @@ Version = "k12-909"
 #[   
 
    V E R Y   USEFULL COMMAND LIST BELOW [SCROLL DOWN]
-                                and also some useless trivia:
+                                and also some history too:
  ----------------------------------------------------------------------------------------------
-       Oh hai thar! So long story short, I wrote the  first lines of this little toy
- back in July as I started learning about this magic script sauce called Expression2.
-       At first as any moron I was worried about minges having it, so I wouldnt share
- it with anyone, not even allowing them to properly dupe it.
-       It was a few months later, after a shitload of time being unable to play Garry's Mod
- due to the massive amount of work college provided me with, when I realized that I was being dumb 
- and that this is all about fun and gummi bears, and so I decided to finally share this shitty toy with the world for fun's sake.
- 
-       Well people seemed to have lots of fun with it, so I kept sharing the code as development
- progressed. Noob coding I know, but hey I hope you have some fun with it :D
+	Hey there!
+	I wrote the first lines of this little toy back in July of 2010 when learning the magix of Expression2.
+	With the intention of stuffing every possible ability I could into one single chip a created the
+assistant as a tool for my day to day Garry's Mod needs.
+	As its popularity began to increasce I remained concerned with the minge-magnitude that could be unleashed
+with it. It was in early 2011 that I finally decided to release the source code and unlock the anti-dupe protection
+I had built into the chip.
+	As of now you are able to receive updates as they are released on git, directly into the assistant embeded code updater, you are also free to share and edit it under the terms of the General Public Licence version 3 (GPL 3).
+	I hope you have fun with this simple toy. As some users have already done, feel free to email me with any questions you might have. Even tho it has been years since I coded into the assistant, I still enjoy helping people using it.
 
- ALSO THAT: The small percentage of the code I didnt write is credited in the Command List Below.
+> The small percentage of the code I didnt write is credited in the Command List Below.
 
- AND THAT: Yes, 25% of the maxquota when every skill is off is a lot, but I cant seem to find a 
-              way to reduce it besides deleting like half of the code, if you find a better way to do this
-		please report it to me, thx :D
+> 25% of the maxquota is a lot while idle, I know. I dont know how to decreasce that without deletting half of the code. Feel free to share if you have any method of making it more efficient in that regard.
+
  ------------------------------------------------------------------------------------------------
 
  MANY THANKS TO:
@@ -60,7 +58,7 @@ Version = "k12-909"
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
  --- Updater ---
- /update - updates or redownloads The Assistant from the Web
+ /update - updates or redownloads The Assistant from the Web (git repository)
 
 
 
@@ -2235,10 +2233,10 @@ NewCode=httpData():trim():explode(VersionInfo:string(3)):string(1)
 
 
 ###############-- Assistant by Grim Kriegor --###############
-#                   grimkriegor@gmail.com
 
                        ##-Changelog-##
 
+#v14-209 - Updated the description, some minor bugfixes
 #k12-909 - Changed the updater links to point to the raw GitHub files
 
 #k11-1121 - Changed my email contact in the manual section. Thx for all the feedback, I'll try to get back to GMod as soon as possible and add some more stuff to this ball.
