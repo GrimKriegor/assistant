@@ -37,7 +37,7 @@ assistant as a tool for my day to day Garry's Mod needs.
 	As its popularity began to increasce I remained concerned with the minge-magnitude that could be unleashed
 with it. It was in early 2011 that I finally decided to release the source code and unlock the anti-dupe protection
 I had built into the chip.
-	As of now you are able to receive updates as they are released on git, directly into the assistant embeded code updater, you are also free to share and edit it under the terms of the General Public Licence version 3 (GPL 3).
+	As of now you are able to receive updates as they are released on git, directly into the assistant embeded code updater, you are also free to share and edit it under the terms of the General Public License version 2.
 	I hope you have fun with this simple toy. As some users have already done, feel free to email me with any questions you might have. Even tho it has been years since I coded into the assistant, I still enjoy helping people using it.
 
 > The small percentage of the code I didnt write is credited in the Command List Below.
