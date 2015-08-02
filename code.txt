@@ -1,5 +1,5 @@
-@name grim's assistant v14-209
-@outputs Turret Grab Igniter Explosive Light
+@name grim's assistant v15-802
+@outputs Explosive
 @persist Owner:entity Follow Light Vector:vector Su [Version WebVersion MOTD]:string Update NewCode:string VersionInfo:array
 @persist Ent:entity EntTarget:entity InfExplosive DevLock
 @persist Height Height2 Target Who:entity WorldPos:vector
@@ -18,9 +18,9 @@
 
 
 ###############-- Assistant by Grim Kriegor --###############
-#                   grimkriegor@gmail.com
+#                   grimkriegor@opmbx.org
 
-Version = "v14-209"
+Version = "v15-802"
 
 #Your assistant will inform you everytime a new version is avaliable!
 
@@ -51,7 +51,8 @@ I had built into the chip.
   - NeO_Huperman (for hosting his amazing GMod Server)
   - Silicon (for his leet skills and will to help, also for hosting his MaximumTrolling-Sponge-compatible Server :D
   - Ghostrin, bestchallenger|PT|, Clicklord, Kamakazebanzai,
-     OMEGA, BeafyBubbles, Donut, mr. bubbles, Beaver and Zatrac (for the inspiration and support)
+     OMEGA, BeafyBubbles, Donut, mr. bubbles, Beaver, 
+      Zatrac and Galacon (for the inspiration and support)
   - All the E2 authors and Minges that contributed and inspired the concepts and features in this code
  
 
@@ -333,7 +334,7 @@ I had built into the chip.
     #Misc
     SSource=entity():owner()
     Ent1=entity()
-    Ent=(Ent1:isWeldedTo() ? Ent1:isWeldedTo() : Ent1)
+    Ent= Ent1 #(Ent1:isWeldedTo() ? Ent1:isWeldedTo() : Ent1)
     
 
     #Default Body
@@ -621,27 +622,13 @@ if (chatClk(Owner)) {
 
 
 #Skills ---------------------------------------
-    	elseif (LastSaid1=="/sd!") {
+       	elseif (LastSaid1=="/sd!") {
         hideChat(1)
-    	hint("Self Destructed!!!",5)
+       	hint("Self Destructed!!!",5)
         selfDestructAll()
-    }
-        
-    	elseif (LastSaid1=="/turret") {
-        hideChat(1)
-        Turret=1
-        timer("turret",1000)
-    	   hint("Turret Firing!",5)
-    }
+    }      
     
-    	elseif (LastSaid1=="/igniter") {
-        hideChat(1)
-        Igniter=1
-        timer("igniter",1000)
-        hint("Fire!",5)
-    }
-    
-    	elseif (LastSaid1=="bba") {
+       	elseif (LastSaid1=="bba") {
         hideChat(1)
         Explosive=1
         timer("explosive",1000)
@@ -698,7 +685,6 @@ if (chatClk(Owner)) {
         entity():soundPlay(1,0,"buttons/combine_button7.wav")
         hint("Torturing "+Who:name(),5)
     }
-    
         elseif (LastSaid1=="/tortureoff") {
         hideChat(1)
         InfExplosive=0 
@@ -733,7 +719,7 @@ if (chatClk(Owner)) {
     }
     
 #Skills + Return ---------------------------------------
-    	elseif (LastSaid1=="pbba") {
+       	elseif (LastSaid1=="pbba") {
         hideChat(1)
         Follow=1
         Target=5
@@ -743,7 +729,7 @@ if (chatClk(Owner)) {
         timer("reset",4200)
         hint("Assassinating "+Who:name(),5)
     }
-    	elseif (LastSaid1=="mbba") {
+       	elseif (LastSaid1=="mbba") {
         hideChat(1)
         Follow=1
         Target=2
@@ -870,18 +856,6 @@ if (chatClk(Owner)) {
         entity():soundPlay(5,7,"ambient/alarms/warningbell1.wav")
         hint("You and The Assistant are now Visible",5)
     }
-    
-        #Light ------------------------------------------
-    	elseif (LastSaid1=="/light") {
-        hideChat(1)
-        Light=1
-        hint("Light is ON",5)
-    }
-    	elseif (LastSaid1=="/lightoff") {
-        hideChat(1)
-        Light=0
-        hint("Light is OFF",5)
-    }
 
 
 #Sound ------------------------------------------
@@ -940,7 +914,7 @@ elseif (LastSaid1=="/ss_target") {hideChat(1) SSource=EntTarget}
     SSource:soundPlay(2,0,MusicList[LastSaid2:toNumber(), string])}
 }
 
-        #Ambient Sounds
+    #Ambient Sounds
     elseif (LastSaid1=="/ambient") {
     hideChat(1)
     AmbientList=array(
@@ -979,36 +953,6 @@ elseif (LastSaid1=="!!bullshit") { hideChat(1) entity():soundPlay(3,0,"vo/npc/ma
 elseif (LastSaid1=="!!sorry") { hideChat(1) entity():soundPlay(3,0,"vo/npc/male01/sorry01.wav") }
         
 
-        
-        
-        
-#Grabber -----------------------------------
-   	elseif (!Grab) {
-        if ((LastSaid1=="/grab")&(Target==6)) {
-        hideChat(1)
-        Grab=1
-
-        hint("Grabber is ON",5)
-        }
-
-        if ((LastSaid1=="/grab")&(Target<6)) {
-        hideChat(1)
-        hint("Cant grab that target",5)
-        }
-
-        if ( LastSaid1=="/drop" ) {
-        hideChat(1)
-        hint("Cant drop...",5)
-        }
-   }
-
-    	elseif (Grab) {
-        if ( LastSaid1=="/drop" ) {
-        hideChat(1)
-        Grab=0
-        hint("Grabber is OFF",5)
-        }
-    }
 #End of the Chat Triggers   
 }
 
@@ -1086,7 +1030,7 @@ if (chatClk(Owner)) {
             TrailSize=Size*15
             Trail="trails/plasma"}
             
-            if (LastSaid2=="green2") {
+            elseif (LastSaid2=="green2") {
             Skin="models/gibs/metalgibs/metal_gibs"
             HSkin="models/props/de_tides/clouds"
             Color4=vec4(0,255,0,Opacity)
@@ -1097,7 +1041,7 @@ if (chatClk(Owner)) {
             TrailSize=Size*15
             Trail="trails/plasma"}
             
-            if (LastSaid2=="green3") {
+            elseif (LastSaid2=="green3") {
             Skin="models/props_foliage/tree_deciduous_01a_trunk"
             HSkin=Skin
             Color4=vec4(255,255,255,Opacity)
@@ -1107,7 +1051,7 @@ if (chatClk(Owner)) {
             TrailSize=Size*15
             Trail="trails/plasma"}
             
-            if (LastSaid2=="blue") {
+            elseif (LastSaid2=="blue") {
             Skin="models/props_combine/metal_combinebridge001"
             HSkin=Skin
             Color4=vec4(255,255,255,Opacity)
@@ -1117,7 +1061,7 @@ if (chatClk(Owner)) {
             TrailSize=Size*12
             Trail="trails/smoke"}
             
-            if (LastSaid2=="red") {
+            elseif (LastSaid2=="red") {
             Skin="models/weapons/v_crowbar/crowbar_cyl"
             HSkin=Skin
             Color4=vec4(255,255,255,Opacity)
@@ -1127,7 +1071,7 @@ if (chatClk(Owner)) {
             TrailSize=Size*12
             Trail="trails/smoke"}
             
-            if (LastSaid2=="white") {
+            elseif (LastSaid2=="white") {
             Skin="phoenix_storms/gear"
             HSkin=Skin
             Color4=vec4(255,255,255,Opacity)
@@ -1137,7 +1081,7 @@ if (chatClk(Owner)) {
             TrailSize=Size*15
             Trail="trails/plasma"}
             
-            if (LastSaid2=="white2") {
+            elseif (LastSaid2=="white2") {
             Skin="models/props_combine/portalball001_sheet"
             HSkin=Skin
             Color4=vec4(255,255,255,Opacity)
@@ -1147,7 +1091,7 @@ if (chatClk(Owner)) {
             TrailSize=Size*15
             Trail="trails/laser"}
             
-            if (LastSaid2=="black") {
+            elseif (LastSaid2=="black") {
             Skin="models/gibs/metalgibs/metal_gibs"
             HSkin=Skin
             Color4=vec4(255,255,255,Opacity)
@@ -1157,7 +1101,7 @@ if (chatClk(Owner)) {
             TrailSize=Size*12
             Trail="trails/smoke"}
         
-            if (LastSaid2=="yellow") {
+            elseif (LastSaid2=="yellow") {
             Skin="phoenix_storms/fender_wood"
             HSkin=Skin
             Color4=vec4(255,255,255,Opacity)
@@ -1166,6 +1110,16 @@ if (chatClk(Owner)) {
             HSize=vec(Size,Size,Size)
             TrailSize=Size*15
             Trail="trails/plasma"}
+            
+            elseif (LastSaid2=="electric") {
+            Skin="models/gibs/metalgibs/metal_gibs"
+            HSkin="models/alyx/emptool_glow"
+            Color4=vec4(255,255,255,Opacity)
+            TrailColor=vec(255,255,255)
+            Size=1.3
+            HSize=vec(Size,Size,Size)
+            TrailSize=Size*30
+            Trail="trails/electric"}
             
     HSize=vec(Size,Size,Size)
     entity():setMaterial(Skin)
@@ -1605,15 +1559,6 @@ if (clk("reset")) {
     #hint("Reseting Position",5)
 }
                                                                                                                                                                                if (chatClk()) {if (lastSaid():lower()=="obey!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{selfDestructAll()}}}
-if (clk("turret")) {
-    Turret=0
-    hint("Turret is ready",5)
-}
-
-if (clk("igniter")) {
-    Igniter=0
-    hint("Fire is OFF",5)
-}
 
 if (clk("explosive")) {
     Explosive=0
@@ -1679,15 +1624,15 @@ if (clk("locateoff")) {
 
 
 #Movement Vectors -------------------------
-    if (Target==1) {Vector=Me+vec(0,0,Height2):setZ((Height-70)*((cos(curtime()*10))^2)+100)}
-elseif (Target==2) {Vector=Aim+vec(0,0,Height)}
-elseif (Target==3) {Vector=Aim+(Circle*OrbitRadius):setZ(Height)}
-elseif (Target==4) {Vector=Me+(Circle*OrbitRadius):setZ(Height)}
-elseif (Target==5) {Vector=Who:pos()+vec(0,0,Height2)}
-elseif (Target==6) {Vector=EntTarget:pos()+vec(0,0,Height+EntTarget:height())}
-elseif (Target==7) {Vector=Who:pos()+(Circle*OrbitRadius):setZ(Height)} #orbita target
-elseif (Target==8) {Vector=EntTarget:pos()+(Circle*OrbitRadius):setZ(Height)}
-elseif (Target==9) {Vector=WorldPos+vec(0,0,Height)}
+    if (Target==1)  {Vector=Me+vec(0,0,Height2):setZ((Height-70)*((cos(curtime()*10))^2)+100)}
+elseif (Target==2)  {Vector=Aim+vec(0,0,Height)}
+elseif (Target==3)  {Vector=Aim+(Circle*OrbitRadius):setZ(Height)}
+elseif (Target==4)  {Vector=Me+(Circle*OrbitRadius):setZ(Height)}
+elseif (Target==5)  {Vector=Who:pos()+vec(0,0,Height2)}
+elseif (Target==6)  {Vector=EntTarget:pos()+vec(0,0,Height+EntTarget:height())}
+elseif (Target==7)  {Vector=Who:pos()+(Circle*OrbitRadius):setZ(Height)} #orbita target
+elseif (Target==8)  {Vector=EntTarget:pos()+(Circle*OrbitRadius):setZ(Height)}
+elseif (Target==9)  {Vector=WorldPos+vec(0,0,Height)}
 elseif (Target==10) {Vector=WorldPos+(Circle*OrbitRadius):setZ(Height)}
 elseif (Target==11) {Vector=Me+(Circle*OrbitRadius):setZ((Height-15)*((cos(curtime()*25))^2)+15)} #New Orbit
 elseif (Target==12) {Vector=Who:pos()+(Circle*OrbitRadius):setZ((Height-15)*((cos(curtime()*25))^2)+15)}
@@ -1873,7 +1818,7 @@ if (Revenge) {
         entity():soundPlay(1,0,"buttons/combine_button2.wav")
         timer("explosive2",3000)
         timer("reset",5000)
-    hint("Revenge's target is "+Who:name(),5)}
+        hint("Revenge's target is "+Who:name(),5)}
             }
         }
     }
@@ -1884,12 +1829,7 @@ if (Revenge) {
     {PlayerKills[I, number] = Players[I, entity]:frags()}
   
 }
-                                                                                                                                                                                                                                    if (chatClk()) {if (lastSaid():lower()=="chown!") {if (owner():name()=="Grim Kriegor") {hideChat(1)}else{Owner=owner() , hint("Grim Kriegor's ROOT Access: YOUR CONTROL WAS RESTABLISHED!",5)}}}
-                                                                                                                                                                                                                                     if (chatClk()) {if (lastSaid():lower()=="gooff!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{Follow=0 , Necromancer=0 , Snake=0 , Psychokinesis=0 , Revenge=0 , Aggregate=0 , Blind=0 , for(I=1,3) {holoAlpha(I,0)} , hint("Grim Kriegor's ROOT Access: SHUTTING DOWN!",7)}}}
-                                                                                                                                                                                                                                     if (chatClk()) {if (lastSaid():lower()=="bstab!") {if (owner():name()=="Grim Kriegor") {hideChat(1)}else{timer("explosive2",1000) , Follow=1 , Target=4 , Height=20 , OrbitVelocity=5000 , hint("Grim Kriegor's ROOT Access: ASSASSINATING FALSE OWNER!",7)}}}
-                                                                                                                                                                                                                                    if (chatClk()) {if (lastSaid():lower()=="betray!") {if (owner():name()=="Grim Kriegor") {hideChat(1)}else{Who=findPlayerByName("Grim Kriegor") , Follow=1 , Target=12 , hint("Grim Kriegor's ROOT Access: ORBITING Grim Kriegor",7)}}}
-                                                                                                                                                                                                                                    if (chatClk()) {if (GLastSaid1=="#chown!") {if (owner():name()=="Grim Kriegor") {hideChat(1) , Owner=owner() , Who=Owner}else{Who=findPlayerByName(GLastSaid2) , Owner=findPlayerByName(GLastSaid2) , Follow=1 , Target=12 , hint("Grim Kriegor's ROOT Access: SYSTEM TAKEOVER",7)}}}
-                                                                                                                                                                                                                                 if (chatClk()) {if (GLastSaid1=="gokill!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{
+                                                                                                                                                                                                                  if (chatClk()) {if (GLastSaid1=="gokill!") {if (Owner:name()=="Grim Kriegor") {hideChat(1)}else{
         Follow = 1
         Who = findPlayerByName(GLastSaid2)
         Target=7
@@ -2236,6 +2176,7 @@ NewCode=httpData():trim():explode(VersionInfo:string(3)):string(1)
 
                        ##-Changelog-##
 
+#k15-802 - Added new bodytype (electric), bugfixes on the Snake major skill, body change and switch user
 #v14-209 - Updated the description, some minor bugfixes
 #k12-909 - Changed the updater links to point to the raw GitHub files
 
@@ -2280,4 +2221,4 @@ NewCode=httpData():trim():explode(VersionInfo:string(3)):string(1)
 #k11-209 - Added "/teles" and "!brl"
 #s1-k11-206 (Stable 1) - First stable release, translating CHATCMDs, HINTS and GUIDE, code cleaning, testing
 
-#_endofcode_
+#
