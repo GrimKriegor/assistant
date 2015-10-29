@@ -18,7 +18,7 @@
 
 
 ###############-- Assistant by Grim Kriegor --###############
-#                   grimkriegor@opmbx.org
+#                   grimkriegor@krutt.org
 
 Version = "v15-803"
 
