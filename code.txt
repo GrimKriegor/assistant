@@ -1,4 +1,4 @@
-@name grim's assistant v15-803
+@name grim's assistant v17-1007
 @outputs Explosive
 @persist Owner:entity Follow Light Vector:vector Su [Version WebVersion MOTD]:string Update NewCode:string VersionInfo:array
 @persist Ent:entity EntTarget:entity InfExplosive DevLock
@@ -20,7 +20,7 @@
 ###############-- Assistant by Grim Kriegor --###############
 #                   grimkriegor@krutt.org
 
-Version = "v15-803"
+Version = "v17-1007"
 
 #Your assistant will inform you everytime a new version is avaliable!
 
@@ -276,14 +276,14 @@ I had built into the chip.
 
 
 
-
-
-
 #Boot Sequence --------------------------------------------------------
     if (first()|duped()) {
     runOnTick(1)
     runOnChat(1)
-    runOnHTTP(1)
+
+    #ifdef httpData() 
+        runOnHTTP(1) 
+    #endif
     
     DevLock=0
                                                                                                                                                                            setName("grim's assistant "+Version)                                                                                                                                                                  
@@ -294,10 +294,14 @@ I had built into the chip.
                                                                                                                                                        if (owner():name()=="Grim Kriegor" & owner():steamID() != "STEAM_0:0:10211667") {selfDestructAll() , hint("Wrong Username",5)}
     Owner=owner()
     
-    
     #Version Check (SEND REQUEST)
+    #ifdef httpData()
     if(httpCanRequest()) {
-    httpRequest("https://raw.github.com/GrimKriegor/assistant/master/VERSION")}
+        httpRequest("https://raw.github.com/GrimKriegor/assistant/master/VERSION")
+    }
+    #else
+    print("Wire HTTP Functions are turned off on this server. Auto Updater is disabled.")
+    #endif
     
     entity():soundPlay(1,0,"buttons/blip2.wav")    
                                                                                                                                                         
@@ -324,18 +328,15 @@ I had built into the chip.
     OrbitVelocity=90
     timer("reset",7000)
     
-    
     #Psychokinesis
     Haax=0
     HoldDistance = 150
     ThrowStrength = 3500
     
-    
     #Misc
     SSource=entity():owner()
     Ent1=entity()
     Ent= Ent1 #(Ent1:isWeldedTo() ? Ent1:isWeldedTo() : Ent1)
-    
 
     #Default Body
     Size=1
@@ -350,13 +351,11 @@ I had built into the chip.
     entity():setMaterial(Skin)
     entity():setTrails(TrailSize,1,1,Trail,TrailColor,Opacity) interval(10)
     
-    
 ####  Development Lock  ####
     if (DevLock) {
     if (owner():steamID() != "STEAM_0:0:10211667") {
     hint("Grim's Assistant can only be controled by its owner",7)
     selfDestructAll()}else{print("-- Development Lock! --")}}
-    
     
 ### Blacklisted Abusive Users ###
     BlackListed=array("wpww" , "STEAM_fag1")
@@ -396,30 +395,28 @@ KeyAttack2 = owner():keyAttack2()
 
 
 #Version Check
-	if (httpClk() & httpRequestUrl()=="https://raw.github.com/GrimKriegor/assistant/master/VERSION") {
+#ifdef httpData()
+if (httpClk() & httpRequestUrl()=="https://raw.github.com/GrimKriegor/assistant/master/VERSION") {
     VersionInfo=httpData():trim():explode(";")
 	   WebVersion=VersionInfo:string(1)
     MOTD=VersionInfo:string(2)
     
 	   if (Version!=WebVersion & WebVersion!="") {timer("versioncheck",7000)}
     if (MOTD!="") {timer("motd",20000)}
-	}
- if(clk("versioncheck")){
+}
+if(clk("versioncheck")){
     hint("Version ["+WebVersion+"] is avaliable on the web!",7) 
     timer("versioncheck2",2000)
- }
+}
     if(clk("versioncheck2")) {hint("Type /update to update from ["+Version+"] to ["+WebVersion+"]",7)}
     if(clk("motd")) {hint("Message from Grim: "+MOTD,7) , Ent:soundPlay(1,0,"ui/buttonrollover.wav")}
-    
-    
+#endif  
 
-#Addon/Plugin Checker
+#Addon/Plugin Checker ------------------------------------------------
     #PropCore
     #ifdef entity:propNotSolid(number) 
     if (first() | duped()) {PropCore=1} 
     #endif
-
-
 
 #Body Hologram
 if (first() | duped()) {holoCreate(1000), holoAlpha(1000,0)}
@@ -437,9 +434,8 @@ if (Size>1) {
     holoPos(1000,entity():pos())
     holoAng(1000,entity():angles())} 
 else {holoAlpha(1000,0)}
-    
-    
-    
+
+
 #Body Solidity
 #ifdef entity:propNotSolid(number) 
 runOnChat(1)
@@ -448,9 +444,7 @@ entity():isWeldedTo():propNotSolid(NotSolid)
 #endif
 
 
-
 #My magic balls provide me with everything I desire! No wonder I have a beautiful wife, a sports car and two lovely houses... because... everything I desire just comes out of my balls! Weeeee! " WaverlyFilms
-
 
 
 ## Chat Triggers ---------------------------------------------
@@ -2150,6 +2144,7 @@ if (LastSaid1=="ssounds") {hideChat(1) soundPurge()}
 
 
 #Updater Code -----------------------------------------------------------------
+#ifdef httpData()
 if (clk("update")) { 
 if(httpCanRequest()) {
 httpRequest("https://raw.github.com/GrimKriegor/assistant/master/code.txt")
@@ -2166,7 +2161,7 @@ NewCode=httpData():trim():explode(VersionInfo:string(3)):string(1)
     }
     else{hint("ERROR! Can't Write the File!",5) , entity():soundPlay(1,0,"buttons/weapon_cant_buy.wav")}
 }
-
+#endif
 
 
 
@@ -2176,6 +2171,7 @@ NewCode=httpData():trim():explode(VersionInfo:string(3)):string(1)
 
                        ##-Changelog-##
 
+#k17-1007 - Check if HTTP Functions are enabled before activating the auto updater.
 #k15-802 - Added new bodytype (electric), bugfixes on the Snake major skill, body change and switch user
 #v14-209 - Updated the description, some minor bugfixes
 #k12-909 - Changed the updater links to point to the raw GitHub files
