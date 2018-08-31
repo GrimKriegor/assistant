@@ -49,7 +49,7 @@ I had built into the chip.
  MANY THANKS TO:
   - Luck Wielding Lunatic (for being the best gaming pal of all tiemz :D)
   - NeO_Huperman (for hosting his amazing GMod Server)
-  - Silicon (for his leet skills and will to help, also for hosting his MaximumTrolling-Sponge-compatible Server :D
+  - BillNyeTheTrollingGuy/Mandrake(for his leet skills and will to help, also for hosting his MaximumTrolling-Sponge-compatible Server :D
   - Ghostrin, bestchallenger|PT|, Clicklord, Kamakazebanzai,
      OMEGA, BeafyBubbles, Donut, mr. bubbles, Beaver, 
       Zatrac and Galacon (for the inspiration and support)
@@ -300,7 +300,7 @@ I had built into the chip.
         httpRequest("https://raw.github.com/GrimKriegor/assistant/master/VERSION")
     }
     #else
-    print("Wire HTTP Functions are turned off on this server. Auto Updater is disabled.")
+    print("Expression 2 HTTP Functions are turned off on this server. Auto Updater is disabled.")
     #endif
     
     entity():soundPlay(1,0,"buttons/blip2.wav")    
@@ -500,9 +500,6 @@ if (chatClk(Owner)) {
         entity():soundPlay(1,0,"buttons/combine_button3.wav")
         hint("Orbit Velocity is now "+OrbitVelocity,5)
     }
-
-#Replace the sponge in the center of the spaceship or face explosion " Silicon
-
     	elseif (LastSaid1=="/master") {
         hideChat(1)
         Target=1
@@ -2217,4 +2214,6 @@ NewCode=httpData():trim():explode(VersionInfo:string(3)):string(1)
 #k11-209 - Added "/teles" and "!brl"
 #s1-k11-206 (Stable 1) - First stable release, translating CHATCMDs, HINTS and GUIDE, code cleaning, testing
 
-#
+
+
+# END OF FILE
